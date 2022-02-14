@@ -1,12 +1,13 @@
 let scene, camera, renderer, sphere;
 let w, h, aspect_ratio
-let entity;
+let entities = [];
 
 function init () {
     scene = new THREE.Scene();
 
-    entity = new Entity();
+    const entity = new Entity();
     entity.spawn(scene);
+    entities.push(entity);
 
     // create orthograpic camera
     w = window.innerWidth
@@ -26,7 +27,7 @@ function init () {
     camera.lookAt(scene.position);
 
     // set the background color with hexdecimal
-    scene.background = new THREE.Color(0x000000);
+    scene.background = new THREE.Color(0x004400);
 
     // create a webgl renderer
     renderer = new THREE.WebGLRenderer();
@@ -44,7 +45,9 @@ function init () {
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-    entity.animate();
+    for(var i = 0; i < entities.length; i++) {
+        entities[i].animate();
+    }
     update();
 }
 
