@@ -13,7 +13,7 @@ class Entity {
         this.colors =   [ 0xffffff,
                           0x444444,
                           0x111111,
-                          0xff0000
+                          0x00ff00
                         ];
                         
     }
@@ -31,7 +31,7 @@ class Entity {
                 // var temp_mat = new THREE.LineBasicMaterial({ color: _colors });
                 temp_geometry = new THREE.Mesh(temp_geo, temp_mat);
                 // temp_geometry = new THREE.LineSegments(temp_geo, temp_mat);
-                console.log(temp_geometry);
+                // console.log(temp_geometry);
                 _scene.add(temp_geometry);
                 _geometry.push(temp_geometry);
             });
