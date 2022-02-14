@@ -1,20 +1,41 @@
 let scene, camera, renderer, sphere;
 let w, h, aspect_ratio
+let player_o, player_i, player_c;
 
 function init () {
     scene = new THREE.Scene();
 
     const loader = new THREE.OBJLoader();
 
-    // loader.load('res/outter_shell.obj', function(object) {
-    //     scene.add(object);
-    // });
+    loader.load('res/outter_shell.obj', function(object) {
+        const player_o_geo = object.children[0].geometry;
+        player_o_geo.center();
+        const player_o_mat = new THREE.MeshLambertMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+        player_o = new THREE.Mesh(player_o_geo, player_o_mat);
+        scene.add(player_o);
+    });
+
+    loader.load('res/inner_shell.obj', function(object) {
+        const player_i_geo = object.children[0].geometry;
+        player_i_geo.center();
+        const player_i_mat = new THREE.MeshLambertMaterial({ color: 0x222222, side: THREE.DoubleSide });
+        player_i = new THREE.Mesh(player_i_geo, player_i_mat);
+        scene.add(player_i);
+    });
+
+    loader.load('res/core_shell.obj', function(object) {
+        const player_c_geo = object.children[0].geometry;
+        player_c_geo.center();
+        const player_c_mat = new THREE.MeshLambertMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+        player_c = new THREE.Mesh(player_c_geo, player_c_mat);
+        scene.add(player_c);
+    });
 
     // create orthograpic camera
     w = window.innerWidth
     h = window.innerHeight;
     aspect_ratio =  w / h;
-    view_size = 10;
+    view_size = 5;
     
     camera = new THREE.OrthographicCamera(
         view_size * aspect_ratio / -2,
@@ -38,26 +59,9 @@ function init () {
     // this is different with node?
     document.body.appendChild(renderer.domElement);
 
-    const geometry = new THREE.SphereGeometry(1, 16, 16);
-    const material = new THREE.LineBasicMaterial({ color: 0xffff00 });
-    sphere = new THREE.LineSegments(geometry, material);
-    scene.add(sphere);
-
-    const terrain_geo = new THREE.PlaneBufferGeometry(8, 8, 32 ,32);
-    const terrain_mat = new THREE.LineBasicMaterial({ color: 0x0000ff });
-    const terrain = new THREE.LineSegments(terrain_geo, terrain_mat);
-    terrain.rotation.x = Math.PI / 2;
-    terrain.position.y += 1;
-
-    const {array} = terrain.geometry.attributes.position;
-    for (let i = 0; i < array.length; i += 3) {
-        const x = array[i];
-        const y = array[i + 1];
-        const z = array[i + 2];
-
-        array[i + 2] = z + Math.random(); 
-    }
-    scene.add(terrain);
+    var light = new THREE.DirectionalLight(0xffffff, 1.0, 10);
+    light.position.set(10,30,10);
+    scene.add(light);
 }
 
 function animate() {
@@ -65,6 +69,17 @@ function animate() {
     
     renderer.render(scene, camera);
     update();
+    player_o.rotation.x += 0.003;
+    player_o.rotation.y += 0.003;
+    player_o.rotation.z += 0.003;
+
+    player_i.rotation.x -= 0.005;
+    player_i.rotation.y -= 0.005;
+    player_i.rotation.z -= 0.005;
+
+    player_c.rotation.x += 0.01;
+    player_c.rotation.y += 0.01;
+    player_c.rotation.z += 0.01;
 }
 
 function onWindowResize() {
