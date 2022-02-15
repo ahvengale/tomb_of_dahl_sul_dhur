@@ -1,19 +1,16 @@
 class Entity {
     constructor() {
-        this.files = [ "res/16x16.obj",
-                        //"res/14x14.obj",
-                        "res/12x12.obj",
-                        //"res/10x10.obj",
-                        "res/8x8.obj",
-                        //"res/6x6.obj",
-                        "res/core_shell.obj"
+        this.files = [ "res/63_ring.obj",
+                       "res/57_ring.obj",
+                       "res/51_ring.obj",
+                       "res/31_sphere.obj",
                       ];
         this.geometries = [];
         this.materials = [];
-        this.colors =   [ 0xffffff,
-                          0x666666,
-                          0x111111,
-                          0x00ff00
+        this.colors =   [   0xffffff,
+                            0xffffff,
+                            0xffffff,
+                            0x00ff00
                         ];
                         
     }
@@ -27,7 +24,7 @@ class Entity {
             loader.load(this.files[i], function(object) {
                 var temp_geo = object.children[0].geometry;
                 temp_geo.center();
-                var temp_mat = new THREE.MeshPhongMaterial({ color: _colors, side: THREE.DoubleSide });
+                var temp_mat = new THREE.MeshLambertMaterial({ color: _colors, side: THREE.DoubleSide });
                 // var temp_mat = new THREE.LineBasicMaterial({ color: _colors });
                 temp_geometry = new THREE.Mesh(temp_geo, temp_mat);
                 // temp_geometry = new THREE.LineSegments(temp_geo, temp_mat);
@@ -41,9 +38,9 @@ class Entity {
     }
     animate() {
         for(var i = 0; i < this.geometries.length; i++) {
-            this.geometries[i].rotation.x += (i + 1) * 0.01;
-            this.geometries[i].rotation.y += (i + 1) * 0.01;
-            this.geometries[i].rotation.z += (i + 1) * 0.01;
+            this.geometries[i].rotation.x += (i + 1) * 0.001;
+            this.geometries[i].rotation.y += (i + 1) * 0.001;
+            this.geometries[i].rotation.z += (i + 1) * 0.001;
         }
     }
 }
