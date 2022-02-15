@@ -1,40 +1,44 @@
 class Entity {
     constructor() {
-        this.files = [ "res/63_ring.obj",
-                       "res/57_ring.obj",
-                       "res/51_ring.obj",
-                       "res/31_sphere.obj",
-                      ];
+        this.files = [
+            "res/models/obj/15x15.obj",
+            "res/models/obj/13x13.obj",
+            "res/models/obj/11x11.obj",
+            "res/models/obj/9x9.obj",
+            "res/models/obj/7x7.obj",
+            "res/models/obj/3xCube.obj"
+        ];
         this.geometries = [];
         this.materials = [];
         this.colors =   [   0xffffff,
-                            0xffffff,
-                            0xffffff,
+                            0xaaaaaa,
+                            0x777777,
+                            0x444444,
+                            0x000000,
                             0x00ff00
                         ];
                         
     }
     spawn(scene) {
         const loader = new THREE.OBJLoader();
-        var temp_geometry;
+        var _geometry;
+        const geometries = [];
         const _scene = scene;
-        const _geometry = [];
+
         for(var i = 0; i < this.files.length; i++) {
-            const _colors = this.colors[i];
-            loader.load(this.files[i], function(object) {
-                var temp_geo = object.children[0].geometry;
-                temp_geo.center();
-                var temp_mat = new THREE.MeshLambertMaterial({ color: _colors, side: THREE.DoubleSide });
-                // var temp_mat = new THREE.LineBasicMaterial({ color: _colors });
-                temp_geometry = new THREE.Mesh(temp_geo, temp_mat);
-                // temp_geometry = new THREE.LineSegments(temp_geo, temp_mat);
-                // console.log(temp_geometry);
-                _scene.add(temp_geometry);
-                _geometry.push(temp_geometry);
-            });
+            const _color = this.colors[i];
+                loader.load(this.files[i],
+                    (object) => {
+                        _geometry = object.children[0].geometry;
+                        _geometry.center();
+                        var temp_mat = new THREE.MeshLambertMaterial({ color: _color, side: THREE.DoubleSide });
+                        var temp_geo = new THREE.Mesh(_geometry, temp_mat);
+                        geometries.push(temp_geo);
+                        _scene.add(temp_geo);
+                    });
+            this.geometries = geometries;
+            console.log(this.geometries);
         }
-        // console.log(_geometry);
-        this.geometries = _geometry;
     }
     animate() {
         for(var i = 0; i < this.geometries.length; i++) {

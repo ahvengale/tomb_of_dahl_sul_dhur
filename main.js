@@ -23,7 +23,7 @@ function init () {
         0.1,
         1000
     );
-    camera.position.set(-200, -200, -200);
+    camera.position.set(-20, -20, -20);
     camera.lookAt(scene.position);
 
     // set the background color with hexdecimal
