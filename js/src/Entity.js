@@ -22,14 +22,14 @@ class Entity {
             if(this.doesAnimate)
             {
                 for(var i = 0; i < this.geometries.length; i++) {
-                    this.geometries[i].rotation.x += (i + 1) * 0.001;
-                    this.geometries[i].rotation.y += (i + 1) * 0.001;
-                    this.geometries[i].rotation.z += (i + 1) * 0.001;
+                    this.geometries[i].rotation.x = i + Date.now() * 0.001;
+                    this.geometries[i].rotation.y = i + Date.now() * 0.001;
+                    this.geometries[i].rotation.z = i + Date.now() * 0.001;
                 }
                 for(var i = 0; i < this.outlines.length; i++) {
-                    this.outlines[i].rotation.x += (i + 1) * 0.001;
-                    this.outlines[i].rotation.y += (i + 1) * 0.001;
-                    this.outlines[i].rotation.z += (i + 1) * 0.001;
+                    this.outlines[i].rotation.x = i + Date.now() * 0.001;
+                    this.outlines[i].rotation.y = i + Date.now() * 0.001;
+                    this.outlines[i].rotation.z = i + Date.now() * 0.001;
                 }
             }
     }
