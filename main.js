@@ -5,9 +5,16 @@ let entities = [];
 function init () {
     scene = new THREE.Scene();
 
-    const entity = new Entity();
+    var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
     entity.spawn(scene);
     entities.push(entity);
+    entity.doesAnimate = true;
+    entity.position_y += 1;
+
+    var entity = new Entity(["15x15x31_Tower"]);
+    entity.spawn(scene);
+    entities.push(entity);
+    entity.position_y -= 1;
 
     // create orthograpic camera
     w = window.innerWidth
@@ -16,10 +23,10 @@ function init () {
     view_size = 5;
     
     camera = new THREE.OrthographicCamera(
-        view_size * aspect_ratio / -2,
         view_size * aspect_ratio / 2,
-        view_size / -2,
+        view_size * aspect_ratio / -2,
         view_size / 2,
+        view_size / -2,
         0.1,
         1000
     );
@@ -42,7 +49,7 @@ function init () {
     scene.add(light);
 
     var d_light = new THREE.DirectionalLight(0xffffff, 1.0);
-    d_light.position.set(0,0,-1);
+    d_light.position.set(0,-1,-1);
     scene.add(d_light);
 
     // console.log(scene.children);
@@ -59,10 +66,10 @@ function animate() {
 
 function onWindowResize() {
     var new_aspect = window.innerWidth / window.innerHeight;
-    camera.left = view_size * new_aspect / -2;
-    camera.right = view_size * new_aspect  / 2;
-    camera.top = view_size / -2;
-    camera.bottom = view_size / 2;
+    camera.left = view_size * new_aspect / 2;
+    camera.right = view_size * new_aspect  / -2;
+    camera.top = view_size / 2;
+    camera.bottom = view_size / -2;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
@@ -96,7 +103,7 @@ function update() {
             }
         }
         for (var i = 0; i < entities_hit.length; i++) {
-            entities_hit[i].animate();
+            // entities_hit[i].animate();
         }
     }
 }
