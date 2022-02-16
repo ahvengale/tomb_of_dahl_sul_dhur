@@ -9,29 +9,29 @@ class Entity {
         this.position_z = 0;    
     }
     animate() {
+        for(var i = 0; i < this.geometries.length; i++) {
+            this.geometries[i].position.x = this.position_x;
+            this.geometries[i].position.y = this.position_y;
+            this.geometries[i].position.z = this.position_z;
+        }
+        for(var i = 0; i < this.outlines.length; i++) {
+            this.outlines[i].position.x = this.position_x;
+            this.outlines[i].position.y = this.position_y;
+            this.outlines[i].position.z = this.position_z;
+        }
+        if(this.doesAnimate)
+        {
             for(var i = 0; i < this.geometries.length; i++) {
-                this.geometries[i].position.x = this.position_x;
-                this.geometries[i].position.y = this.position_y;
-                this.geometries[i].position.z = this.position_z;
+                this.geometries[i].rotation.x = i + Date.now() * 0.001;
+                this.geometries[i].rotation.y = i + Date.now() * 0.001;
+                this.geometries[i].rotation.z = i + Date.now() * 0.001;
             }
             for(var i = 0; i < this.outlines.length; i++) {
-                this.outlines[i].position.x = this.position_x;
-                this.outlines[i].position.y = this.position_y;
-                this.outlines[i].position.z = this.position_z;
+                this.outlines[i].rotation.x = i + Date.now() * 0.001;
+                this.outlines[i].rotation.y = i + Date.now() * 0.001;
+                this.outlines[i].rotation.z = i + Date.now() * 0.001;
             }
-            if(this.doesAnimate)
-            {
-                for(var i = 0; i < this.geometries.length; i++) {
-                    this.geometries[i].rotation.x = i + Date.now() * 0.001;
-                    this.geometries[i].rotation.y = i + Date.now() * 0.001;
-                    this.geometries[i].rotation.z = i + Date.now() * 0.001;
-                }
-                for(var i = 0; i < this.outlines.length; i++) {
-                    this.outlines[i].rotation.x = i + Date.now() * 0.001;
-                    this.outlines[i].rotation.y = i + Date.now() * 0.001;
-                    this.outlines[i].rotation.z = i + Date.now() * 0.001;
-                }
-            }
+        }
     }
     spawn(scene) {
         const mtlLoader = new THREE.MTLLoader();
@@ -65,7 +65,5 @@ class Entity {
         } 
         this.geometries = geometries;
         this.outlines = outlines;
-        // console.log(this.geometries);
-        // console.log(this.geometries[0]);
     }
 }
