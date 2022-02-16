@@ -9,18 +9,18 @@ function init () {
     entity.spawn(scene);
     entities.push(entity);
     entity.doesAnimate = true;
-    entity.position_y += 1;
+    entity.position_y += 15;
 
     var entity = new Entity(["15x15x31_Tower"]);
     entity.spawn(scene);
     entities.push(entity);
-    entity.position_y -= 1;
+    entity.position_y -= 10;
 
     // create orthograpic camera
     w = window.innerWidth
     h = window.innerHeight;
     aspect_ratio =  w / h;
-    view_size = 5;
+    view_size = 50;
     
     camera = new THREE.OrthographicCamera(
         view_size * aspect_ratio / 2,

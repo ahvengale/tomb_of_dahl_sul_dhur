@@ -50,6 +50,7 @@ class Entity {
                 objLoader.load( url + ".obj", function ( object ) {
                     _geometry = object.children[0];
                     _geometry.geometry.center();
+                    _geometry.scale.set(10,10,10);
                     _geometry.material.side = 1;
                     var _edges = new THREE.EdgesGeometry( _geometry.geometry );
                     _edges.scale = 1.5;
