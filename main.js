@@ -34,7 +34,7 @@ function init () {
     camera.lookAt(scene.position);
 
     // set the background color with hexdecimal
-    scene.background = new THREE.Color(0x222222);
+    scene.background = new THREE.Color(0x666666);
 
     // create a webgl renderer
     renderer = new THREE.WebGLRenderer();
@@ -44,11 +44,11 @@ function init () {
     // this is different with node?
     document.body.appendChild(renderer.domElement);
 
-    var light = new THREE.AmbientLight(0xffffff, 0.6);
+    var light = new THREE.AmbientLight(0xffffff, 2.0);
     light.position.set(0,0,0);
     scene.add(light);
 
-    var d_light = new THREE.DirectionalLight(0xffffff, 1.0);
+    var d_light = new THREE.DirectionalLight(0xffffff, 2.0);
     d_light.position.set(0,-10,-5);
     scene.add(d_light);
 
