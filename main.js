@@ -13,7 +13,7 @@ function init () {
     w = window.innerWidth
     h = window.innerHeight;
     aspect_ratio =  w / h;
-    view_size = 10;
+    view_size = 5;
     
     camera = new THREE.OrthographicCamera(
         view_size * aspect_ratio / -2,
@@ -23,11 +23,11 @@ function init () {
         0.1,
         1000
     );
-    camera.position.set(-20, -20, -20);
+    camera.position.set(20, 20, 20);
     camera.lookAt(scene.position);
 
     // set the background color with hexdecimal
-    scene.background = new THREE.Color(0x000000);
+    scene.background = new THREE.Color(0x222222);
 
     // create a webgl renderer
     renderer = new THREE.WebGLRenderer();
@@ -37,9 +37,15 @@ function init () {
     // this is different with node?
     document.body.appendChild(renderer.domElement);
 
-    var light = new THREE.DirectionalLight(0xffffff, 1.0, 10);
-    light.position.set(100,300,100);
+    var light = new THREE.AmbientLight(0xffffff, 0.6);
+    light.position.set(0,0,0);
     scene.add(light);
+
+    var d_light = new THREE.DirectionalLight(0xffffff, 1.0);
+    d_light.position.set(0,0,-1);
+    scene.add(d_light);
+
+    // console.log(scene.children);
 }
 
 function animate() {
@@ -61,11 +67,42 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+var mouse = new THREE.Vector2(-1,-1);
+
+function onMouseMove(event) {
+    // calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+  
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  
+  }
+
 function update() {
-    
+    var raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera);
+    var intersection = raycaster.intersectObjects(scene.children);
+    const entities_hit = [];
+    if(intersection.length > 0) {
+        for (var i = 0; i < 1; i++) {
+            // console.log(intersection[i].object.uuid);
+            for(var j = 0; j < entities.length; j++)
+            {
+                console.log(entities[j].geometries.includes(intersection[i].object));
+                if(!entities_hit.includes(entities[j])) {
+                    entities_hit.push(entities[j]);
+                }
+                
+            }
+        }
+        for (var i = 0; i < entities_hit.length; i++) {
+            entities_hit[i].animate();
+        }
+    }
 }
 
 window.addEventListener('resize', onWindowResize, false);
+document.addEventListener('mousemove', onMouseMove, false);
 
 init();
 animate();
