@@ -14,20 +14,17 @@ function game_loop()
 
 function onWindowResize() {
     var new_aspect = window.innerWidth / window.innerHeight;
-    camera.left = view_size * new_aspect / 2;
-    camera.right = view_size * new_aspect / -2;
-    camera.top = view_size / 2;
-    camera.bottom = view_size / -2;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    rendering_engine.camera.left = rendering_engine.view_size * new_aspect / 2;
+    rendering_engine.camera.right = rendering_engine.view_size * new_aspect / -2;
+    rendering_engine.camera.top = rendering_engine.view_size / 2;
+    rendering_engine.camera.bottom = rendering_engine.view_size / -2;
+    rendering_engine.camera.updateProjectionMatrix();
+    rendering_engine.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 var mouse = new THREE.Vector2(-1, -1);
 
 function onMouseMove(event) {
-    // calculate mouse position in normalized device coordinates
-    // (-1 to +1) for both components
-
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
