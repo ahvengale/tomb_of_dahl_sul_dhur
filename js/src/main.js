@@ -1,96 +1,15 @@
-let scene, camera, renderer, sphere;
-let w, h, aspect_ratio, view_size;
-let entities = [];
+let rendering_engine
 
 function init() {
-    scene = new THREE.Scene();
-
-    for(var tile = 0; tile < 3; tile++) {
-        var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
-        entity.spawn(scene);
-        entities.push(entity);
-        entity.doesAnimate = true;
-        entity.position_y += 15;
-        entity.position_x += 64 * (tile);
-
-        var entity = new Entity(["15x15x31_Tower"]);
-        entity.spawn(scene);
-        entities.push(entity);
-        entity.position_y -= 10;
-        entity.position_x += 64 * (tile);
-
-        var entity = new Entity(["base_plate"]);
-        entity.spawn(scene);
-        entities.push(entity);
-        entity.position_y -= 25;
-        entity.position_x += 64 * (tile);
-
-        var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
-        entity.spawn(scene);
-        entities.push(entity);
-        entity.doesAnimate = true;
-        entity.position_y += 15;
-        entity.position_z += 64 * (tile);
-
-        var entity = new Entity(["15x15x31_Tower"]);
-        entity.spawn(scene);
-        entities.push(entity);
-        entity.position_y -= 10;
-        entity.position_z += 64 * (tile);
-
-        var entity = new Entity(["base_plate"]);
-        entity.spawn(scene);
-        entities.push(entity);
-        entity.position_y -= 25;
-        entity.position_z += 64 * (tile);
-    }
-
-    // create orthograpic camera
-    w = window.innerWidth
-    h = window.innerHeight;
-    aspect_ratio = w / h;
-    view_size = 300;
-
-    camera = new THREE.OrthographicCamera(
-        view_size * aspect_ratio / 2,
-        view_size * aspect_ratio / -2,
-        view_size / 2,
-        view_size / -2,
-        0.1,
-        1000
-    );
-    camera.position.set(100, 100, 100);
-    camera.lookAt(scene.position);
-
-    // set the background color with hexdecimal
-    scene.background = new THREE.Color(0x666666);
-
-    // create a webgl renderer
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    // add the renderer to the Document Object Model
-    // this is different with node?
-    document.body.appendChild(renderer.domElement);
-
-    var light = new THREE.AmbientLight(0xffffff, 2.0);
-    light.position.set(0, 0, 0);
-    scene.add(light);
-
-    var d_light = new THREE.DirectionalLight(0xffffff, 1.0);
-    d_light.position.set(0, -10, -5);
-    scene.add(d_light);
-
-    // console.log(scene.children);
+    rendering_engine = new RenderingEngine(window);
+    rendering_engine.init();
 }
 
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-    for (var i = 0; i < entities.length; i++) {
-        entities[i].animate();
-    }
-    update();
+function game_loop()
+{
+    requestAnimationFrame(game_loop);
+    rendering_engine.renderer.render(rendering_engine.scene, rendering_engine.camera);
+    rendering_engine.animate();
 }
 
 function onWindowResize() {
@@ -114,7 +33,7 @@ function onMouseMove(event) {
 
 }
 
-function update() {
+function onMouseOver() {
     var raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
     var intersection = raycaster.intersectObjects(scene.children);
@@ -140,4 +59,4 @@ window.addEventListener('resize', onWindowResize, false);
 document.addEventListener('mousemove', onMouseMove, false);
 
 init();
-animate();
+game_loop();
