@@ -40,7 +40,7 @@ class Entity {
                     _geometry = object.children[0];
                     _geometry.geometry.center();
                     _geometry.scale.set(10, 10, 10);
-                    _geometry.material.side = 1;
+                    _geometry.material.side = 2;
                     scene.add(_geometry);
                     geometries.push(_geometry);
                 });

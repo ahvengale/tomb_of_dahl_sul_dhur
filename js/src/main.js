@@ -5,23 +5,51 @@ let entities = [];
 function init() {
     scene = new THREE.Scene();
 
+    for(var tile = 0; tile < 3; tile++) {
+        var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
+        entity.spawn(scene);
+        entities.push(entity);
+        entity.doesAnimate = true;
+        entity.position_y += 15;
+        entity.position_x += 64 * (tile);
 
-    var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
-    entity.spawn(scene);
-    entities.push(entity);
-    entity.doesAnimate = true;
-    entity.position_y += 15;
+        var entity = new Entity(["15x15x31_Tower"]);
+        entity.spawn(scene);
+        entities.push(entity);
+        entity.position_y -= 10;
+        entity.position_x += 64 * (tile);
 
-    var entity = new Entity(["15x15x31_Tower"]);
-    entity.spawn(scene);
-    entities.push(entity);
-    entity.position_y -= 10;
+        var entity = new Entity(["base_plate"]);
+        entity.spawn(scene);
+        entities.push(entity);
+        entity.position_y -= 25;
+        entity.position_x += 64 * (tile);
+
+        var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
+        entity.spawn(scene);
+        entities.push(entity);
+        entity.doesAnimate = true;
+        entity.position_y += 15;
+        entity.position_z += 64 * (tile);
+
+        var entity = new Entity(["15x15x31_Tower"]);
+        entity.spawn(scene);
+        entities.push(entity);
+        entity.position_y -= 10;
+        entity.position_z += 64 * (tile);
+
+        var entity = new Entity(["base_plate"]);
+        entity.spawn(scene);
+        entities.push(entity);
+        entity.position_y -= 25;
+        entity.position_z += 64 * (tile);
+    }
 
     // create orthograpic camera
     w = window.innerWidth
     h = window.innerHeight;
     aspect_ratio = w / h;
-    view_size = 50;
+    view_size = 300;
 
     camera = new THREE.OrthographicCamera(
         view_size * aspect_ratio / 2,
@@ -31,7 +59,7 @@ function init() {
         0.1,
         1000
     );
-    camera.position.set(20, 20, 20);
+    camera.position.set(100, 100, 100);
     camera.lookAt(scene.position);
 
     // set the background color with hexdecimal
@@ -45,11 +73,11 @@ function init() {
     // this is different with node?
     document.body.appendChild(renderer.domElement);
 
-    var light = new THREE.AmbientLight(0xffffff, 3.0);
+    var light = new THREE.AmbientLight(0xffffff, 2.0);
     light.position.set(0, 0, 0);
     scene.add(light);
 
-    var d_light = new THREE.DirectionalLight(0xffffff, 2.0);
+    var d_light = new THREE.DirectionalLight(0xffffff, 1.0);
     d_light.position.set(0, -10, -5);
     scene.add(d_light);
 
