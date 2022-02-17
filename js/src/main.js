@@ -2,8 +2,9 @@ let scene, camera, renderer, sphere;
 let w, h, aspect_ratio
 let entities = [];
 
-function init () {
+function init() {
     scene = new THREE.Scene();
+
 
     var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
     entity.spawn(scene);
@@ -19,9 +20,9 @@ function init () {
     // create orthograpic camera
     w = window.innerWidth
     h = window.innerHeight;
-    aspect_ratio =  w / h;
-    view_size = 50;
-    
+    aspect_ratio = w / h;
+    var view_size = 50;
+
     camera = new THREE.OrthographicCamera(
         view_size * aspect_ratio / 2,
         view_size * aspect_ratio / -2,
@@ -45,11 +46,11 @@ function init () {
     document.body.appendChild(renderer.domElement);
 
     var light = new THREE.AmbientLight(0xffffff, 3.0);
-    light.position.set(0,0,0);
+    light.position.set(0, 0, 0);
     scene.add(light);
 
     var d_light = new THREE.DirectionalLight(0xffffff, 2.0);
-    d_light.position.set(0,-10,-5);
+    d_light.position.set(0, -10, -5);
     scene.add(d_light);
 
     // console.log(scene.children);
@@ -58,7 +59,7 @@ function init () {
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-    for(var i = 0; i < entities.length; i++) {
+    for (var i = 0; i < entities.length; i++) {
         entities[i].animate();
     }
     update();
@@ -67,39 +68,38 @@ function animate() {
 function onWindowResize() {
     var new_aspect = window.innerWidth / window.innerHeight;
     camera.left = view_size * new_aspect / 2;
-    camera.right = view_size * new_aspect  / -2;
+    camera.right = view_size * new_aspect / -2;
     camera.top = view_size / 2;
     camera.bottom = view_size / -2;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-var mouse = new THREE.Vector2(-1,-1);
+var mouse = new THREE.Vector2(-1, -1);
 
 function onMouseMove(event) {
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
-  
+
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  
-  }
+
+}
 
 function update() {
     var raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
     var intersection = raycaster.intersectObjects(scene.children);
     const entities_hit = [];
-    if(intersection.length > 0) {
+    if (intersection.length > 0) {
         for (var i = 0; i < 1; i++) {
             // console.log(intersection[i].object.uuid);
-            for(var j = 0; j < entities.length; j++)
-            {
+            for (var j = 0; j < entities.length; j++) {
                 console.log(entities[j].geometries.includes(intersection[i].object));
-                if(!entities_hit.includes(entities[j])) {
+                if (!entities_hit.includes(entities[j])) {
                     entities_hit.push(entities[j]);
                 }
-                
+
             }
         }
         for (var i = 0; i < entities_hit.length; i++) {
