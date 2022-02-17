@@ -1,5 +1,7 @@
 let rendering_engine
 
+var mouse = new THREE.Vector2(-1, -1);
+
 init();
 game_loop();
 
@@ -7,7 +9,7 @@ window.addEventListener('resize', onWindowResize, false);
 document.addEventListener('mousemove', onMouseMove, false);
 
 function init() {
-    rendering_engine = new RenderingEngine(window);
+    rendering_engine = new RenderingEngine();
     rendering_engine.init();
 }
 
@@ -27,8 +29,6 @@ function onWindowResize() {
     rendering_engine.camera.updateProjectionMatrix();
     rendering_engine.renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
-var mouse = new THREE.Vector2(-1, -1);
 
 function onMouseMove(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
