@@ -1,5 +1,5 @@
 let scene, camera, renderer, sphere;
-let w, h, aspect_ratio
+let w, h, aspect_ratio, view_size;
 let entities = [];
 
 function init() {
@@ -21,7 +21,7 @@ function init() {
     w = window.innerWidth
     h = window.innerHeight;
     aspect_ratio = w / h;
-    var view_size = 50;
+    view_size = 50;
 
     camera = new THREE.OrthographicCamera(
         view_size * aspect_ratio / 2,
