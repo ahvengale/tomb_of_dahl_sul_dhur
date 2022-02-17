@@ -1,5 +1,11 @@
 let rendering_engine
 
+init();
+game_loop();
+
+window.addEventListener('resize', onWindowResize, false);
+document.addEventListener('mousemove', onMouseMove, false);
+
 function init() {
     rendering_engine = new RenderingEngine(window);
     rendering_engine.init();
@@ -51,9 +57,3 @@ function onMouseOver() {
         }
     }
 }
-
-window.addEventListener('resize', onWindowResize, false);
-document.addEventListener('mousemove', onMouseMove, false);
-
-init();
-game_loop();

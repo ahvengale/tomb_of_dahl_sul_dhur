@@ -50,7 +50,7 @@ class RenderingEngine
 
     test() {
         for(var tile = 0; tile < 3; tile++) {
-            console.log(tile);
+            // console.log(tile);
             var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
             entity.spawn(this.scene);
             this.entities.push(entity);
