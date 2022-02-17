@@ -1,0 +1,25 @@
+{
+  "name": "tomb_of_dahl_sul_dhur",
+  "version": "1.0.0",
+  "description": "OpenGL is fun",
+  "main": "app.js",
+  "scripts": {
+    "test": "set DEBUG=express:* & node App.js",
+    "start": "node App.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/demonmunchies/tomb_of_dahl_sul_dhur.git"
+  },
+  "author": "demonmunchies",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/demonmunchies/tomb_of_dahl_sul_dhur/issues"
+  },
+  "homepage": "https://github.com/demonmunchies/tomb_of_dahl_sul_dhur#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "helmet": "^5.0.2",
+    "three": "^0.137.5"
+  }
+}
