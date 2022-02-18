@@ -22,7 +22,7 @@ class RenderingEngine
     }
 
     init() {
-        this.camera.position.set(30, 30, 30);
+        this.camera.position.set(100, 100, 100);
         this.camera.lookAt(this.scene.position);
 
         this.scene.background = new THREE.Color(0x666666);
@@ -55,7 +55,7 @@ class RenderingEngine
     test() {
         for(var tile = 0; tile < 3; tile++) {
 
-            var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
+            var entity = new Entity(["2x2_Solid", "5x5_Outline", "15x15_CubicDesign"]);
             entity.spawn(this.scene);
             this.entities.push(entity);
             entity.doesAnimate = true;
@@ -74,7 +74,7 @@ class RenderingEngine
             entity.position_y -= 25;
             entity.position_x += 64 * (tile - 1);
     
-            var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
+            var entity = new Entity(["2x2_Solid", "5x5_Outline", "15x15_CubicDesign"]);
             entity.spawn(this.scene);
             this.entities.push(entity);
             entity.doesAnimate = true;
