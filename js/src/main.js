@@ -23,8 +23,8 @@ function game_loop()
 
 function onWindowResize() {
     var new_aspect = window.innerWidth / window.innerHeight;
-    rendering_engine.camera.left = rendering_engine.view_size * new_aspect / 2;
-    rendering_engine.camera.right = rendering_engine.view_size * new_aspect / -2;
+    rendering_engine.camera.left = rendering_engine.view_size * new_aspect / -2;
+    rendering_engine.camera.right = rendering_engine.view_size * new_aspect / 2;
     rendering_engine.camera.top = rendering_engine.view_size / 2;
     rendering_engine.camera.bottom = rendering_engine.view_size / -2;
     rendering_engine.camera.updateProjectionMatrix();
