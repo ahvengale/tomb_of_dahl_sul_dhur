@@ -6,8 +6,8 @@ init();
 game_loop();
 
 window.addEventListener('resize', onWindowResize, false);
-window.addEventListener('mousedown', onClick, false);
-document.addEventListener('mousemove', onMouseMove, false);
+window.addEventListener('click', RaycastEngine.onClick, false);
+document.addEventListener('mousemove', RaycastEngine.onMouseMove, false);
 
 function init() {
     rendering_engine = new RenderingEngine();
@@ -36,40 +36,4 @@ function onWindowResize() {
     rendering_engine.camera.bottom = rendering_engine.view_size / -2;
     rendering_engine.camera.updateProjectionMatrix();
     rendering_engine.renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function onMouseMove(event) {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-}
-
-function onClick() {
-    var raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, rendering_engine.camera);
-    var intersection = raycaster.intersectObjects(rendering_engine.scene.children);
-    var tiles = [];
-    // console.log(intersection);
-    const entities_hit = [];
-    if (intersection.length > 0) {
-        for (var i = 0; i < intersection.length; i++) {
-            // console.log("intersected object");
-            // console.log(console.log(intersection[i].object));
-            // console.log("tile objects");
-            for (var j = 0; j < gameboard.tiles.length; j++) {
-                // console.log(gameboard.tiles[j].entity.geometries.includes(intersection[i].object));
-                if(gameboard.tiles[j].entity.geometries.includes(intersection[i].object)) {
-                    console.log(gameboard.tiles[j].tower);
-                    console.log(gameboard.tiles[j].tower.visible);
-                    if(!tiles.includes(gameboard.tiles[j])) {
-                        tiles.push(gameboard.tiles[j]);
-                    }
-                }
-            }
-        }
-    }
-    // console.log(tiles);
-    for(var i = 0; i < tiles.length; i++) {
-        tiles[i].hasTower = !tiles[i].hasTower;
-    }
 }

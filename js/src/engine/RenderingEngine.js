@@ -45,6 +45,7 @@ class RenderingEngine
         this.scene.add(d_light);
 
         // this.test();
+        RaycastEngine.rendering_engine = this;
     }
 
     animate() {
