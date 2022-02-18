@@ -10,7 +10,7 @@ class RenderingEngine
         this.entities = [];
 
         this.scene = new THREE.Scene();
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({antialias: true});
         this.camera = new THREE.OrthographicCamera(
             this.view_size * this.aspect_ratio / -2,
             this.view_size * this.aspect_ratio / 2,
@@ -28,15 +28,19 @@ class RenderingEngine
         this.scene.background = new THREE.Color(0x666666);
 
         this.renderer.setSize(this.w, this.h);
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         document.body.appendChild(this.renderer.domElement);
 
-        var light = new THREE.AmbientLight(0xffffff, 2.0);
-        light.position.set(0, 0, 0);
-        this.scene.add(light);
-
-        const d_light = new THREE.DirectionalLight(0xffffff, 3.0);
-        d_light.position.set(5, 10, 1);
+        const d_light = new THREE.DirectionalLight(0xffffff, 5.0);
+        d_light.position.set(50, 100, 10);
+        d_light.castShadow = true;
+        var side = 100;
+        d_light.shadow.camera.top = side;
+        d_light.shadow.camera.bottom = -side;
+        d_light.shadow.camera.left = side;
+        d_light.shadow.camera.right = -side;
         this.scene.add(d_light);
 
         this.test();
