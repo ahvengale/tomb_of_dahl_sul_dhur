@@ -5,7 +5,7 @@ class RenderingEngine
         this.w = window.innerWidth;
         this.h = window.innerHeight;
         this.aspect_ratio = this.w / this.h;
-        this.view_size = 100;
+        this.view_size = 200;
 
         this.entities = [];
 
@@ -22,7 +22,7 @@ class RenderingEngine
     }
 
     init() {
-        this.camera.position.set(100, 100, 100);
+        this.camera.position.set(500, 500, 500);
         this.camera.lookAt(this.scene.position);
 
         this.scene.background = new THREE.Color(0x666666);
@@ -36,7 +36,7 @@ class RenderingEngine
         const d_light = new THREE.DirectionalLight(0xffffff, 10.0);
         d_light.position.set(50, 100, 10);
         d_light.castShadow = true;
-        var side = 100;
+        var side = 200;
         d_light.shadow.camera.top = side;
         d_light.shadow.camera.bottom = -side;
         d_light.shadow.camera.left = side;
