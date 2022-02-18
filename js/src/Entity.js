@@ -43,8 +43,6 @@ class Entity {
                     _geometry.material.side = THREE.DoubleSide;
                     _geometry.castShadow = true;
                     _geometry.receiveShadow = true;
-                    _geometry.geometry.castShadow = true;
-                    _geometry.geometry.receiveShadow = true;
                     scene.add(_geometry);
                     geometries.push(_geometry);
                 });

@@ -10,7 +10,7 @@ class RenderingEngine
         this.entities = [];
 
         this.scene = new THREE.Scene();
-        this.renderer = new THREE.WebGLRenderer({antialias: true});
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.camera = new THREE.OrthographicCamera(
             this.view_size * this.aspect_ratio / -2,
             this.view_size * this.aspect_ratio / 2,
@@ -33,7 +33,7 @@ class RenderingEngine
 
         document.body.appendChild(this.renderer.domElement);
 
-        const d_light = new THREE.DirectionalLight(0xffffff, 5.0);
+        const d_light = new THREE.DirectionalLight(0xffffff, 10.0);
         d_light.position.set(50, 100, 10);
         d_light.castShadow = true;
         var side = 100;
@@ -73,6 +73,7 @@ class RenderingEngine
             this.entities.push(entity);
             entity.position_y -= 25;
             entity.position_x += 64 * (tile - 1);
+            entity.receiveShadow = false;
     
             var entity = new Entity(["2x2_Solid", "5x5_Outline", "15x15_CubicDesign"]);
             entity.spawn(this.scene);
