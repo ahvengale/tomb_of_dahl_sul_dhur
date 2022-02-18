@@ -15,7 +15,9 @@ class Entity {
             this.geometries[i].position.z = this.position_z;
         }
         if (this.doesAnimate) {
-            // this.position_y += 0.01
+            // this.position_x -= 0.01;
+            // this.position_y -= 0.01;
+            // this.position_z -= 0.01;
             for (var i = 0; i < this.geometries.length; i++) {
                 this.geometries[i].rotation.x = i + Date.now() * 0.001;
                 this.geometries[i].rotation.y = i + Date.now() * 0.001;
@@ -42,6 +44,8 @@ class Entity {
                     _geometry.geometry.center();
                     _geometry.scale.set(10, 10, 10);
                     _geometry.material.side = THREE.DoubleSide;
+                    _geometry.geometry.castShadow = true;
+                    _geometry.geometry.receiveShadow = true;
                     _geometry.castShadow = true;
                     _geometry.receiveShadow = true;
                     scene.add(_geometry);

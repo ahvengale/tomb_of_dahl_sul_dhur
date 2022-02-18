@@ -29,7 +29,6 @@ function onWindowResize() {
     rendering_engine.camera.bottom = rendering_engine.view_size / -2;
     rendering_engine.camera.updateProjectionMatrix();
     rendering_engine.renderer.setSize(window.innerWidth, window.innerHeight);
-    rendering_engine.rednerer.shadowMapCullFace = THREE.CullFaceBack;
 }
 
 function onMouseMove(event) {

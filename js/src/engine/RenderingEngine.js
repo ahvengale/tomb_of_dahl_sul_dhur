@@ -12,8 +12,8 @@ class RenderingEngine
         this.scene = new THREE.Scene();
         this.renderer = new THREE.WebGLRenderer();
         this.camera = new THREE.OrthographicCamera(
-            this.view_size * this.aspect_ratio / 2,
             this.view_size * this.aspect_ratio / -2,
+            this.view_size * this.aspect_ratio / 2,
             this.view_size / 2,
             this.view_size / -2,
             0.1,
@@ -22,7 +22,7 @@ class RenderingEngine
     }
 
     init() {
-        this.camera.position.set(100, 100, 100);
+        this.camera.position.set(30, 30, 30);
         this.camera.lookAt(this.scene.position);
 
         this.scene.background = new THREE.Color(0x666666);
@@ -35,8 +35,8 @@ class RenderingEngine
         light.position.set(0, 0, 0);
         this.scene.add(light);
 
-        var d_light = new THREE.DirectionalLight(0xffffff, 2.0);
-        d_light.position.set(0, -10, -5);
+        const d_light = new THREE.DirectionalLight(0xffffff, 3.0);
+        d_light.position.set(5, 10, 1);
         this.scene.add(d_light);
 
         this.test();
@@ -50,7 +50,7 @@ class RenderingEngine
 
     test() {
         for(var tile = 0; tile < 3; tile++) {
-            // console.log(tile);
+
             var entity = new Entity(["2x2_Solid", "5x5_Outline"]);
             entity.spawn(this.scene);
             this.entities.push(entity);
