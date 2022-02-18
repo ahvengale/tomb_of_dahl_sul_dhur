@@ -15,6 +15,9 @@ class Tile
 
     animate() {
         this.entity.animate();
+        for(var i = 0; i < this.tower.geometries.length; i++) {
+            this.tower.geometries[i].visible = this.hasTower;
+        }
         if(this.hasTower) {
             this.tower.animate();
             // console.log();
