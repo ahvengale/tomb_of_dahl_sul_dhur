@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "OpenGL is fun",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "test": "set DEBUG=express:* & node App.js",
     "start": "node App.js"

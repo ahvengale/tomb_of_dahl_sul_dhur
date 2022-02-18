@@ -1,8 +1,12 @@
-const express = require("express")
-const path = require("path")
-const fs = require("fs")
-const helmet = require("helmet")
+import express from "express"
+import * as path from "path"
+import helmet from "helmet"
 
+import { fileURLToPath } from 'url';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express()
 const port = 3000
@@ -12,6 +16,7 @@ app.use(helmet({
     contentSecurityPolicy: false,
 }
 ))
+app.use(helmet.noSniff())
 
 //Express middleware
 /*
@@ -20,11 +25,13 @@ app.use(helmet({
 */
 app.use('/static', express.static(path.join(__dirname, '/js'))) //virtual directory routing /static routs to local /js and sending it to client
 app.use('/models', express.static(path.join(__dirname, '/res'))) //same idea with /models. This is providing all of the model objects from /res
+app.use('/node', express.static(path.join(__dirname, '/node_modules')))
 
-
-
+express.static.mime.define({ 'application/javascript': ['js'] });
+express.static.mime.define({ 'text/html': ['html'] });
 // respond with our index file when a GET request is made to the homepage
 app.get('/', (req, res) => {
+    res.setHeader('Content-Type', 'text/html')
     //__dirname is our dynamic root path
     res.sendFile(path.join(__dirname, 'index.html'))
 })

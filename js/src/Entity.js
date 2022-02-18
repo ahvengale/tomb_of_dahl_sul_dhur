@@ -1,4 +1,6 @@
-class Entity {
+
+
+export default class Entity {
     constructor(files) {
         this.files = files;
         this.geometries = [];
@@ -51,7 +53,7 @@ class Entity {
         this.geometries = geometries;
     }
     despawn(scene) {
-        for(var i = 0; i < this.geometries.length; i++) {
+        for (var i = 0; i < this.geometries.length; i++) {
             scene.remove(this.geometries[i]);
         }
     }

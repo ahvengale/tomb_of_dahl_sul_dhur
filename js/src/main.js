@@ -1,32 +1,44 @@
-let rendering_engine, gameboard
+import * as THREE from "/node/three/build/three.module.js";
+import Entity from "/static/src/Entity.js"
 
-var mouse = new THREE.Vector2(-1, -1);
+//create 3 required objects: scene, camera, and renderer
+const scene = new THREE.Scene()
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, .01, 1000)
+const renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector('#C'),
+});
 
-init();
-game_loop();
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight)
 
-window.addEventListener('resize', onWindowResize, false);
-document.addEventListener('mousemove', onMouseMove, false);
+camera.position.setZ(30);
 
-function init() {
-    rendering_engine = new RenderingEngine();
-    rendering_engine.init();
-    // console.log(rendering_engine.scene)
+renderer.render(scene, camera)
 
-    gameboard = new GameBoard(3);
-    gameboard.init(rendering_engine);
-    // gameboard.test(rendering_engine, 0);
-    // gameboard.test(rendering_engine, 2);
-    // gameboard.test(rendering_engine, 5);
-    console.log(gameboard);
-}
+const geometry = new Entity(["15x15x31_Tower"]);
+const material = new THREE.MeshBasicMaterial({ color: 0xF235df, wireframe: true })
+const m = new THREE.Mesh(geometry, material)
+
+scene.add(m)
 
 function game_loop() {
     requestAnimationFrame(game_loop);
-    rendering_engine.renderer.render(rendering_engine.scene, rendering_engine.camera);
-    rendering_engine.animate();
+    renderer.render(scene, camera)
+
 }
 
+
+game_loop();
+
+
+
+
+
+
+/*
+window.addEventListener('resize', onWindowResize, false);
+document.addEventListener('mousemove', onMouseMove, false);
+gameboard = new GameBoard(3);
 function onWindowResize() {
     var new_aspect = window.innerWidth / window.innerHeight;
     rendering_engine.camera.left = rendering_engine.view_size * new_aspect / -2;
@@ -44,7 +56,7 @@ function onMouseMove(event) {
 }
 
 function onMouseOver() {
-    var raycaster = new THREE.Raycaster();
+    var raycaster = new Raycaster();
     raycaster.setFromCamera(mouse, camera);
     var intersection = raycaster.intersectObjects(scene.children);
     const entities_hit = [];
@@ -64,3 +76,4 @@ function onMouseOver() {
         }
     }
 }
+*/

@@ -1,7 +1,7 @@
-class RenderingEngine
-{  
+module.exports;
+class RenderingEngine {
     constructor() {
-        
+
         this.w = window.innerWidth;
         this.h = window.innerHeight;
         this.aspect_ratio = this.w / this.h;
@@ -19,6 +19,7 @@ class RenderingEngine
             0.1,
             1000
         );
+
     }
 
     init() {
@@ -48,13 +49,13 @@ class RenderingEngine
     }
 
     animate() {
-        for(var i = 0; i < this.entities.length; i++) {
+        for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].animate();
         }
     }
 
     test() {
-        for(var tile = 0; tile < 3; tile++) {
+        for (var tile = 0; tile < 3; tile++) {
 
             var entity = new Entity(["2x2_Solid", "5x5_Outline", "15x15_CubicDesign"]);
             entity.spawn(this.scene);
@@ -62,33 +63,33 @@ class RenderingEngine
             entity.doesAnimate = true;
             entity.position_y += 15;
             entity.position_x += 64 * (tile - 1);
-    
+
             var entity = new Entity(["15x15x31_Tower"]);
             entity.spawn(this.scene);
             this.entities.push(entity);
             entity.position_y -= 10;
             entity.position_x += 64 * (tile - 1);
-    
+
             var entity = new Entity(["base_plate"]);
             entity.spawn(this.scene);
             this.entities.push(entity);
             entity.position_y -= 25;
             entity.position_x += 64 * (tile - 1);
             entity.receiveShadow = false;
-    
+
             var entity = new Entity(["2x2_Solid", "5x5_Outline", "15x15_CubicDesign"]);
             entity.spawn(this.scene);
             this.entities.push(entity);
             entity.doesAnimate = true;
             entity.position_y += 15;
             entity.position_z += 64 * (tile - 1);
-    
+
             var entity = new Entity(["15x15x31_Tower"]);
             entity.spawn(this.scene);
             this.entities.push(entity);
             entity.position_y -= 10;
             entity.position_z += 64 * (tile - 1);
-    
+
             var entity = new Entity(["base_plate"]);
             entity.spawn(this.scene);
             this.entities.push(entity);
