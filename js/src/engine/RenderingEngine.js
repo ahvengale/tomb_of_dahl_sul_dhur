@@ -41,6 +41,7 @@ class RenderingEngine
         d_light.shadow.camera.bottom = -side;
         d_light.shadow.camera.left = side;
         d_light.shadow.camera.right = -side;
+        d_light.shadow.bias = -0.01;
         this.scene.add(d_light);
 
         this.test();
