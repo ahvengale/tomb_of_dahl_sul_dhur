@@ -1,4 +1,4 @@
-let rendering_engine
+let rendering_engine, gameboard
 
 var mouse = new THREE.Vector2(-1, -1);
 
@@ -12,10 +12,12 @@ function init() {
     rendering_engine = new RenderingEngine();
     rendering_engine.init();
     console.log(rendering_engine.scene)
+
+    gameboard = new GameBoard(3);
+    gameboard.init(rendering_engine);
 }
 
-function game_loop()
-{
+function game_loop() {
     requestAnimationFrame(game_loop);
     rendering_engine.renderer.render(rendering_engine.scene, rendering_engine.camera);
     rendering_engine.animate();
