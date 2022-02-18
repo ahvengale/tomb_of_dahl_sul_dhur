@@ -49,6 +49,10 @@ class Entity {
             });
         }
         this.geometries = geometries;
-        this.outlines = outlines;
+    }
+    despawn(scene) {
+        for(var i = 0; i < this.geometries.length; i++) {
+            scene.remove(this.geometries[i]);
+        }
     }
 }

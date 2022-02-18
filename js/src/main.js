@@ -11,10 +11,14 @@ document.addEventListener('mousemove', onMouseMove, false);
 function init() {
     rendering_engine = new RenderingEngine();
     rendering_engine.init();
-    console.log(rendering_engine.scene)
+    // console.log(rendering_engine.scene)
 
     gameboard = new GameBoard(3);
     gameboard.init(rendering_engine);
+    // gameboard.test(rendering_engine, 0);
+    // gameboard.test(rendering_engine, 2);
+    // gameboard.test(rendering_engine, 5);
+    console.log(gameboard);
 }
 
 function game_loop() {
@@ -48,7 +52,7 @@ function onMouseOver() {
         for (var i = 0; i < 1; i++) {
             // console.log(intersection[i].object.uuid);
             for (var j = 0; j < entities.length; j++) {
-                console.log(entities[j].geometries.includes(intersection[i].object));
+                // console.log(entities[j].geometries.includes(intersection[i].object));
                 if (!entities_hit.includes(entities[j])) {
                     entities_hit.push(entities[j]);
                 }

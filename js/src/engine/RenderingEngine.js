@@ -44,7 +44,7 @@ class RenderingEngine
         d_light.shadow.bias = -0.01;
         this.scene.add(d_light);
 
-        this.test();
+        // this.test();
     }
 
     animate() {
