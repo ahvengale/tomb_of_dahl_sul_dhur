@@ -6,12 +6,8 @@ game_loop();
 function init() {
     RenderingEngine.init();
     RaycastEngine.init();
-    // RenderingEngine.map.init();
-
     gameboard = new GameBoard(1);
     gameboard.init();
-
-    RaycastEngine.map = gameboard;
 }
 
 function game_loop() {

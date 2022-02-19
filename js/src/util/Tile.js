@@ -10,14 +10,12 @@ class Tile
         this.entity.position_z = this.z;
         this.tower.position_x = this.x;
         this.tower.position_z = this.z;
-        // console.log(this.entity);
     }
 
     animate() {
         this.entity.animate();
         if(this.hasTower) {
             this.tower.animate();
-            // console.log();
         }
     }
 

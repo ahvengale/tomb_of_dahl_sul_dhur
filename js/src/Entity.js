@@ -29,22 +29,26 @@ class Entity {
         var mtlLoader = new THREE.MTLLoader();
         var geometries = [];
         mtlLoader.setPath('models/models/obj/');
+
         for (var i = 0; i < this.files.length; i++) {
-            const url = this.files[i];
+            var url = this.files[i];
             var tags = this.tags;
             var parent = this.parent;
             var _geometry = new THREE.Mesh();
+
             mtlLoader.load(url + ".mtl", function (materials) {
                 materials.preload();
 
                 var objLoader = new THREE.OBJLoader();
                 objLoader.setMaterials(materials);
                 objLoader.setPath('models/models/obj/');
+                
                 objLoader.load(url + ".obj", function (object) {
                     _geometry = object.children[0];
                     _geometry.geometry.center();
                     _geometry.scale.set(10, 10, 10);
                     _geometry.material.side = THREE.DoubleSide;
+
                     _geometry.castShadow = true;
                     _geometry.receiveShadow = true;
                     _geometry.visible = true;

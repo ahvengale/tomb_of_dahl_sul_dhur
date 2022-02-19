@@ -14,13 +14,12 @@ class GameBoard
                 RenderingEngine.entities.push(tile);
 
                 var tower = tile.tower;
-                // tile.hasTower = true;
-                tower.spawn(RenderingEngine.scene);
-                RenderingEngine.entities.push(tower);
                 tower.doesAnimate = true;
                 tower.position_y += 15;
                 tower.position_x = tile.tower.position_x;
                 tower.position_z = tile.tower.position_z;
+                tower.spawn(RenderingEngine.scene);
+                RenderingEngine.entities.push(tower);
             }
         }
     }

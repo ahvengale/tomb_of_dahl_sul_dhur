@@ -15,9 +15,6 @@ class RenderingEngine
         0.1,
         1000
     );
-    static map;
-
-    // static map = new GameBoard(1);
 
     static init() {
         window.addEventListener('resize', RenderingEngine.onWindowResize, false);
@@ -56,15 +53,11 @@ class RenderingEngine
 
     static onWindowResize() {
         var new_aspect = window.innerWidth / window.innerHeight;
-        this.renderer.camera.left = this.view_size * new_aspect / -2;
-        this.renderer.camera.right = this.view_size * new_aspect / 2;
-        this.renderer.camera.top = this.view_size / 2;
-        this.renderer.camera.bottom = rendering_engine.view_size / -2;
-        this.renderer.camera.updateProjectionMatrix();
-        this.renderer.renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
-    static onWindowResize() {
-
+        RenderingEngine.camera.left = RenderingEngine.view_size * new_aspect / -2;
+        RenderingEngine.camera.right = RenderingEngine.view_size * new_aspect / 2;
+        RenderingEngine.camera.top = RenderingEngine.view_size / 2;
+        RenderingEngine.camera.bottom = RenderingEngine.view_size / -2;
+        RenderingEngine.camera.updateProjectionMatrix();
+        RenderingEngine.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 }
