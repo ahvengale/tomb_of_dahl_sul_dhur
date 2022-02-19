@@ -2,14 +2,11 @@ class Tile
 {  
     constructor(filename, x, z) {
         this.entity = new Entity([filename], [Layer.Tile], this);
-        this.tower = new Entity(["Book2"], [], this);
-        this.hasTower = true;
         this.x = x;
         this.z = z;
         this.entity.position_x = this.x;
         this.entity.position_z = this.z;
-        this.tower.position_x = this.x;
-        this.tower.position_z = this.z;
+        this.entity.visible = true;
     }
 
     animate() {
@@ -18,12 +15,10 @@ class Tile
             this.tower.animate();
         }
     }
-
-    toggleTower() {
-        this.hasTower = !this.hasTower;
-        this.tower.visible = this.hasTower;
-        for(var i = 0; i < this.tower.geometries.length; i++) {
-            this.tower.geometries[i].visible = this.hasTower;
+    toggle() {
+        this.entity.visible = !this.entity.visible;
+        for(var i = 0; i < this.entity.geometries.length; i++) {
+            this.entity.geometries[i].visible = this.entity.visible;
         }
     }
 }
