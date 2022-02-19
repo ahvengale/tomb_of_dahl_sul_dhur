@@ -33,6 +33,8 @@ class RenderingEngine
         light.position.set(50, 50, 0);
         light.castShadow = true;
         var side = 200;
+        light.shadow.mapSize.width = 1024;
+        light.shadow.mapSize.height = 1024;
         light.shadow.camera.top = side;
         light.shadow.camera.bottom = -side;
         light.shadow.camera.left = side;
