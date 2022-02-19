@@ -22,8 +22,9 @@ class RaycastEngine {
         // console.log(intersection);
         const entities_hit = [];
         if (intersection.length > 0) {
-            console.log(intersection[0].object.visible = !intersection[0].object.visible);
+            // intersection[0].object.visible = !intersection[0].object.visible
             // console.log(intersection[0].object);
+            LayerEngine.handleRaycast(intersection[0].object, 0);
         }
 
     }

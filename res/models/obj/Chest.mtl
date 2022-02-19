@@ -1,4 +1,4 @@
-# Blender MTL File: 'Torch.blend'
+# Blender MTL File: 'Chest.blend'
 # Material Count: 3
 
 newmtl DarkSteel
@@ -11,10 +11,10 @@ Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl Fire
+newmtl Steel
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
-Kd 0.640001 0.075375 0.023601
+Kd 0.328751 0.328751 0.328751
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000

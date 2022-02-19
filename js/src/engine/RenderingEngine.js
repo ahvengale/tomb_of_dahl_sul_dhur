@@ -16,12 +16,14 @@ class RenderingEngine
         1000
     );
 
+    // static map = new GameBoard(1);
+
     static init() {
         window.addEventListener('resize', RenderingEngine.onWindowResize, false);
         RenderingEngine.camera.position.set(500, 500, 500);
         RenderingEngine.camera.lookAt(RenderingEngine.scene.position);
 
-        RenderingEngine.scene.background = new THREE.Color(0x666666);
+        RenderingEngine.scene.background = new THREE.Color(0x000000);
 
         RenderingEngine.renderer.setSize(RenderingEngine.w, RenderingEngine.h);
         RenderingEngine.renderer.shadowMap.enabled = true;
@@ -29,16 +31,20 @@ class RenderingEngine
 
         document.body.appendChild(RenderingEngine.renderer.domElement);
 
-        const d_light = new THREE.DirectionalLight(0xffffff, 7.0);
-        d_light.position.set(50, 100, 10);
-        d_light.castShadow = true;
+        var light = new THREE.PointLight(0xffffff, 1.0);
+        light.position.set(0, 100, 0);
+        light.castShadow = true;
         var side = 200;
-        d_light.shadow.camera.top = side;
-        d_light.shadow.camera.bottom = -side;
-        d_light.shadow.camera.left = side;
-        d_light.shadow.camera.right = -side;
-        d_light.shadow.bias = -0.01;
-        RenderingEngine.scene.add(d_light);
+        light.shadow.camera.top = side;
+        light.shadow.camera.bottom = -side;
+        light.shadow.camera.left = side;
+        light.shadow.camera.right = -side;
+        light.shadow.bias = -0.01;
+        RenderingEngine.scene.add(light);
+
+        var light = new THREE.AmbientLight(0xffffff, 1.0);
+        light.position.set(0, 0, 0);
+        RenderingEngine.scene.add(light);
     }
 
     static animate() {

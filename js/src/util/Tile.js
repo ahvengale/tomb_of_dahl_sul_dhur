@@ -1,9 +1,9 @@
 class Tile
 {  
     constructor(filename, x, z) {
-        this.entity = new Entity([filename]);
-        this.tower = new Entity(["wall_gateDoor"]);
-        this.hasTower = true;
+        this.entity = new Entity([filename], [Layer.Tile]);
+        this.tower = new Entity(["Book2"], [Layer.Tile]);
+        this.hasTower = false;
         this.x = x;
         this.z = z;
         this.entity.position_x = this.x;
