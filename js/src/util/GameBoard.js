@@ -8,7 +8,7 @@ class GameBoard
     init() {
         for(var i = 0; i < this.boardSize; i++) {
             for (var j = 0; j < this.boardSize; j++) {
-                var tile = new Tile("ModularFloor", i * 21, j * 21);
+                var tile = new Tile("ModularFloor", i * 20, j * 20);
                 this.tiles.push(tile);
                 tile.entity.spawn(RenderingEngine.scene);
                 RenderingEngine.entities.push(tile);
