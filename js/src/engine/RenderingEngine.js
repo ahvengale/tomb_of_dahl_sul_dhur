@@ -3,7 +3,7 @@ class RenderingEngine
     static w = window.innerWidth;
     static h = window.innerHeight;
     static aspect_ratio = RenderingEngine.w / RenderingEngine.h;
-    static view_size = 200;
+    static view_size = 50;
     static entities = [];
     static scene = new THREE.Scene();
     static renderer = new THREE.WebGLRenderer({ antialias: true });

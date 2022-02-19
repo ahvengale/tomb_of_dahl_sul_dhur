@@ -2,7 +2,7 @@ class Tile
 {  
     constructor(filename, x, z) {
         this.entity = new Entity([filename]);
-        this.tower = new Entity(["Book_Open"]);
+        this.tower = new Entity(["wall_gateDoor"]);
         this.hasTower = true;
         this.x = x;
         this.z = z;
