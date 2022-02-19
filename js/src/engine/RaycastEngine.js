@@ -3,8 +3,9 @@ class RaycastEngine {
     static mouse = new THREE.Vector2(-1, -1);
     static rendering_engine;
 
-    init() {
-
+    static init() {
+        window.addEventListener('click', RaycastEngine.onClick, false);
+        document.addEventListener('mousemove', RaycastEngine.onMouseMove, false);
     }
 
     static onMouseMove(event) {
@@ -14,14 +15,15 @@ class RaycastEngine {
     }
 
     static onClick() {
-        var raycaster = new THREE.Raycaster();
-        raycaster.setFromCamera(RaycastEngine.mouse, RaycastEngine.rendering_engine.camera);
-        var intersection = raycaster.intersectObjects(RaycastEngine.rendering_engine.scene.children);
+        RaycastEngine.raycast = new THREE.Raycaster();
+        RaycastEngine.raycast.setFromCamera(RaycastEngine.mouse, RenderingEngine.camera);
+        var intersection = RaycastEngine.raycast.intersectObjects(RenderingEngine.scene.children);
         var tile;
         // console.log(intersection);
         const entities_hit = [];
         if (intersection.length > 0) {
             console.log(intersection[0].object.visible = !intersection[0].object.visible);
+            // console.log(intersection[0].object);
         }
 
     }

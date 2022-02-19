@@ -23,9 +23,9 @@ class Entity {
         }
     }
     spawn(scene) {
-        const mtlLoader = new THREE.MTLLoader();
-        const geometries = [];
-        const outlines = [];
+        var mtlLoader = new THREE.MTLLoader();
+        var geometries = [];
+        var outlines = [];
         mtlLoader.setPath('models/models/obj/');
         for (var i = 0; i < this.files.length; i++) {
             const url = this.files[i];
@@ -45,6 +45,7 @@ class Entity {
                     _geometry.receiveShadow = true;
                     scene.add(_geometry);
                     geometries.push(_geometry);
+                    // _geometry.visible = false;
                 });
             });
         }

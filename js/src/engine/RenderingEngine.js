@@ -1,39 +1,35 @@
 class RenderingEngine
 {  
-    constructor() {
-        
-        this.w = window.innerWidth;
-        this.h = window.innerHeight;
-        this.aspect_ratio = this.w / this.h;
-        this.view_size = 200;
+    static w = window.innerWidth;
+    static h = window.innerHeight;
+    static aspect_ratio = RenderingEngine.w / RenderingEngine.h;
+    static view_size = 200;
+    static entities = [];
+    static scene = new THREE.Scene();
+    static renderer = new THREE.WebGLRenderer({ antialias: true });
+    static camera = new THREE.OrthographicCamera(
+        this.view_size * this.aspect_ratio / -2,
+        this.view_size * this.aspect_ratio / 2,
+        this.view_size / 2,
+        this.view_size / -2,
+        0.1,
+        1000
+    );
 
-        this.entities = [];
+    static init() {
+        window.addEventListener('resize', RenderingEngine.onWindowResize, false);
+        RenderingEngine.camera.position.set(500, 500, 500);
+        RenderingEngine.camera.lookAt(RenderingEngine.scene.position);
 
-        this.scene = new THREE.Scene();
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        this.camera = new THREE.OrthographicCamera(
-            this.view_size * this.aspect_ratio / -2,
-            this.view_size * this.aspect_ratio / 2,
-            this.view_size / 2,
-            this.view_size / -2,
-            0.1,
-            1000
-        );
-    }
+        RenderingEngine.scene.background = new THREE.Color(0x666666);
 
-    init() {
-        this.camera.position.set(500, 500, 500);
-        this.camera.lookAt(this.scene.position);
+        RenderingEngine.renderer.setSize(RenderingEngine.w, RenderingEngine.h);
+        RenderingEngine.renderer.shadowMap.enabled = true;
+        RenderingEngine.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-        this.scene.background = new THREE.Color(0x666666);
+        document.body.appendChild(RenderingEngine.renderer.domElement);
 
-        this.renderer.setSize(this.w, this.h);
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-        document.body.appendChild(this.renderer.domElement);
-
-        const d_light = new THREE.DirectionalLight(0xffffff, 10.0);
+        const d_light = new THREE.DirectionalLight(0xffffff, 7.0);
         d_light.position.set(50, 100, 10);
         d_light.castShadow = true;
         var side = 200;
@@ -42,59 +38,26 @@ class RenderingEngine
         d_light.shadow.camera.left = side;
         d_light.shadow.camera.right = -side;
         d_light.shadow.bias = -0.01;
-        this.scene.add(d_light);
-
-        // this.test();
-        RaycastEngine.rendering_engine = this;
+        RenderingEngine.scene.add(d_light);
     }
 
-    animate() {
+    static animate() {
         for(var i = 0; i < this.entities.length; i++) {
             this.entities[i].animate();
         }
     }
 
-    test() {
-        for(var tile = 0; tile < 3; tile++) {
+    static onWindowResize() {
+        var new_aspect = window.innerWidth / window.innerHeight;
+        this.renderer.camera.left = this.view_size * new_aspect / -2;
+        this.renderer.camera.right = this.view_size * new_aspect / 2;
+        this.renderer.camera.top = this.view_size / 2;
+        this.renderer.camera.bottom = rendering_engine.view_size / -2;
+        this.renderer.camera.updateProjectionMatrix();
+        this.renderer.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
 
-            var entity = new Entity(["2x2_Solid", "5x5_Outline", "15x15_CubicDesign"]);
-            entity.spawn(this.scene);
-            this.entities.push(entity);
-            entity.doesAnimate = true;
-            entity.position_y += 15;
-            entity.position_x += 64 * (tile - 1);
-    
-            var entity = new Entity(["15x15x31_Tower"]);
-            entity.spawn(this.scene);
-            this.entities.push(entity);
-            entity.position_y -= 10;
-            entity.position_x += 64 * (tile - 1);
-    
-            var entity = new Entity(["base_plate"]);
-            entity.spawn(this.scene);
-            this.entities.push(entity);
-            entity.position_y -= 25;
-            entity.position_x += 64 * (tile - 1);
-            entity.receiveShadow = false;
-    
-            var entity = new Entity(["2x2_Solid", "5x5_Outline", "15x15_CubicDesign"]);
-            entity.spawn(this.scene);
-            this.entities.push(entity);
-            entity.doesAnimate = true;
-            entity.position_y += 15;
-            entity.position_z += 64 * (tile - 1);
-    
-            var entity = new Entity(["15x15x31_Tower"]);
-            entity.spawn(this.scene);
-            this.entities.push(entity);
-            entity.position_y -= 10;
-            entity.position_z += 64 * (tile - 1);
-    
-            var entity = new Entity(["base_plate"]);
-            entity.spawn(this.scene);
-            this.entities.push(entity);
-            entity.position_y -= 25;
-            entity.position_z += 64 * (tile - 1);
-        }
+    static onWindowResize() {
+
     }
 }
