@@ -9,7 +9,9 @@ function init() {
     // RenderingEngine.map.init();
 
     gameboard = new GameBoard(1);
-    gameboard.init(RenderingEngine.renderer);
+    gameboard.init();
+
+    RaycastEngine.map = gameboard;
 }
 
 function game_loop() {

@@ -1,5 +1,5 @@
 class Entity {
-    constructor(files, tags) {
+    constructor(files, tags, parent) {
         this.files = files;
         this.geometries = [];
         this.outlines = [];
@@ -8,6 +8,7 @@ class Entity {
         this.position_y = 0;
         this.position_z = 0;
         this.tags = tags
+        this.parent = parent;
         console.log()
     }
     animate() {
@@ -24,13 +25,14 @@ class Entity {
             }
         }
     }
-    spawn(scene) {
+    spawn() {
         var mtlLoader = new THREE.MTLLoader();
         var geometries = [];
         mtlLoader.setPath('models/models/obj/');
         for (var i = 0; i < this.files.length; i++) {
             const url = this.files[i];
             var tags = this.tags;
+            var parent = this.parent;
             var _geometry = new THREE.Mesh();
             mtlLoader.load(url + ".mtl", function (materials) {
                 materials.preload();
@@ -45,10 +47,12 @@ class Entity {
                     _geometry.material.side = THREE.DoubleSide;
                     _geometry.castShadow = true;
                     _geometry.receiveShadow = true;
-                    scene.add(_geometry);
-                    geometries.push(_geometry);
                     _geometry.visible = true;
                     _geometry.userData.tags = tags;
+                    _geometry.userData.parent = parent;
+
+                    geometries.push(_geometry);
+                    RenderingEngine.scene.add(_geometry);
                 });
             });
         }

@@ -15,6 +15,7 @@ class RenderingEngine
         0.1,
         1000
     );
+    static map;
 
     // static map = new GameBoard(1);
 
