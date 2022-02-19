@@ -6,7 +6,7 @@ game_loop();
 function init() {
     RenderingEngine.init();
     RaycastEngine.init();
-    gameboard = new GameBoard(1);
+    gameboard = new GameBoard(2);
     gameboard.init();
 }
 

@@ -29,8 +29,8 @@ class RenderingEngine
 
         document.body.appendChild(RenderingEngine.renderer.domElement);
 
-        var light = new THREE.PointLight(0xffffff, 1.0);
-        light.position.set(0, 100, 0);
+        var light = new THREE.DirectionalLight(0xffffff, 1.0);
+        light.position.set(50, 50, 0);
         light.castShadow = true;
         var side = 200;
         light.shadow.camera.top = side;
@@ -40,7 +40,7 @@ class RenderingEngine
         light.shadow.bias = -0.01;
         RenderingEngine.scene.add(light);
 
-        var light = new THREE.AmbientLight(0xffffff, 1.0);
+        var light = new THREE.AmbientLight(0xffffff, 0.0);
         light.position.set(0, 0, 0);
         RenderingEngine.scene.add(light);
     }

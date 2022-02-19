@@ -21,9 +21,11 @@ class RaycastEngine {
         var hit = [];
         if (intersection.length > 0) {
             for(var i = 0; i < intersection.length; i++) {
-                if(!hit.includes(intersection[i].object)) {
-                    hit.push(intersection[0].object);
-                    RaycastEngine.handleRaycast(intersection[i].object, 0);
+                if(intersection[i].object.userData.tags.length > 0) {
+                    if(!hit.includes(intersection[i].object)) {
+                        hit.push(intersection[i].object);
+                        RaycastEngine.handleRaycast(intersection[i].object, 0);
+                    }
                 }
             }
         }

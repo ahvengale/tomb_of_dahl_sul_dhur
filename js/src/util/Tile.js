@@ -14,9 +14,7 @@ class Tile
 
     animate() {
         this.entity.animate();
-        if(this.hasTower) {
-            this.tower.animate();
-        }
+        this.tower.animate();
     }
 
     toggleTower() {
