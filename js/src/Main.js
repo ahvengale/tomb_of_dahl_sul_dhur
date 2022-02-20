@@ -54,13 +54,7 @@ function load(filename, x, y, z) {
 
 const mouse = new THREE.Vector2(-1, -1);
 
-function onMouseMove(event) {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-}
-
-function onClick() {
+window.addEventListener('mousedown', () => {
     const raycast = new THREE.Raycaster();
     raycast.setFromCamera(mouse, camera);
     var intersection = raycast.intersectObjects(scene.children);
@@ -68,9 +62,14 @@ function onClick() {
         console.log(intersection[0])
         intersection[0].object.visible = !intersection[0].object.visible
     }
-}
+});
 
-function onWindowResize() {
+document.addEventListener('mousemove', () => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+});
+
+window.addEventListener('resize', () => {
     const new_aspect = window.innerWidth / window.innerHeight;
     camera.left = view_size * new_aspect / -2;
     camera.right = view_size * new_aspect / 2;
@@ -78,11 +77,7 @@ function onWindowResize() {
     camera.bottom = view_size / -2;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-window.addEventListener('mousedown', onClick, false);
-document.addEventListener('mousemove', onMouseMove, false);
-window.addEventListener('resize', onWindowResize, false);
+});
 
 function animate() {
     requestAnimationFrame( animate );
