@@ -70,8 +70,19 @@ function onClick() {
     }
 }
 
+function onWindowResize() {
+    const new_aspect = window.innerWidth / window.innerHeight;
+    camera.left = view_size * new_aspect / -2;
+    camera.right = view_size * new_aspect / 2;
+    camera.top = view_size / 2;
+    camera.bottom = view_size / -2;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
 window.addEventListener('mousedown', onClick, false);
 document.addEventListener('mousemove', onMouseMove, false);
+window.addEventListener('resize', onWindowResize, false);
 
 function animate() {
     requestAnimationFrame( animate );
