@@ -31,11 +31,6 @@ const dir_light = new THREE.DirectionalLight( 0xffffff, 1.0 );
 dir_light.position.set( 0, 100, 50 );
 scene.add( dir_light )
 
-// load( "ModularFloor", 0, 0, 0 );
-// load( "ModularFloor", 2, 0, 2 );
-// load( "ModularFloor", 0, 0, 2 );
-// load( "ModularFloor", 2, 0, 0 );
-
 renderer.render( scene, camera );
 
 animate();
@@ -54,9 +49,24 @@ function load(filename, fn) {
     });
 }
 
-let temp;
 load("ModularFloor", (e) => {
-    scene.add(e);;
+    e.position.set(0, 0, 0)
+    scene.add(e);
+})
+
+load("ModularFloor", (e) => {
+    e.position.set(2, 0, 2)
+    scene.add(e);
+})
+
+load("ModularFloor", (e) => {
+    e.position.set(2, 0, 0)
+    scene.add(e);
+})
+
+load("ModularFloor", (e) => {
+    e.position.set(0, 0, 2)
+    scene.add(e);
 })
 
 
