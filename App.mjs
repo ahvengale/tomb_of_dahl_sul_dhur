@@ -28,7 +28,7 @@ app.use('/models', express.static(path.join(__dirname, '/res'))) //same idea wit
 app.use('/dist', express.static(path.join(__dirname, '/dist')))
 
 
-express.static.mime.define({ 'application/javascript': ['js'] });
+express.static.mime.define({ 'application/javascript': ['js'] }); //no idea if this is doing anything... 
 express.static.mime.define({ 'text/html': ['html'] });
 // respond with our index file when a GET request is made to the homepage
 app.get('/', (req, res) => {

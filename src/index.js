@@ -38,7 +38,7 @@ function animate() {
 
 animate();
 
-function load(filename, x, y, z, fn) {
+function load(filename, fn) {
     const mtlLoader = new MTLLoader();
     mtlLoader.setPath('models/models/obj/');
     mtlLoader.load(filename + ".mtl", function (materials) {
@@ -47,16 +47,18 @@ function load(filename, x, y, z, fn) {
         objLoader.setMaterials(materials);
         objLoader.setPath('models/models/obj/');
         objLoader.load(filename + ".obj", function (object) {
-            object.children[0].position.set(x, y, z);
-            fn(object.children[0])
+            fn(object.children[0]);
         });
     });
 }
 
-load("base_plate", 0, 0, 0, function (_e) {
-    console.log(_e)
-    scene.add(_e)
+
+load("base_plate", (e) => {
+    e.position.set(0, 0, 0);
+    scene.add(e)
 })
+
+
 
 const mouse = new THREE.Vector2(-1, -1);
 
@@ -76,13 +78,11 @@ document.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('resize', () => {
-    const new_aspect = window.innerWidth / window.innerHeight;
-    camera.left = view_size * new_aspect / -2;
-    camera.right = view_size * new_aspect / 2;
-    camera.top = view_size / 2;
-    camera.bottom = view_size / -2;
-    camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
 });
 
 
