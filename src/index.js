@@ -3,7 +3,7 @@ import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { DragControls } from "three/examples/jsm/controls/DragControls.js";
-import { PCFSoftShadowMap, Vector3 } from "three";
+import { CompressedPixelFormat, PCFSoftShadowMap, Vector3 } from "three";
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -25,22 +25,32 @@ const amb_light = new THREE.AmbientLight(0xffffff, 2.0)
 amb_light.position.set(0, 100, 100)
 scene.add(amb_light)
 
-const dir_light = new THREE.DirectionalLight(0xffffff, 2.0)
-dir_light.position.set(0, 100, 50)
+const dir_light = new THREE.PointLight(0xffffff, 2.0)
+dir_light.position.set(2, 2, 2)
 dir_light.castShadow = true
 scene.add(dir_light)
+
+let cool_thing, other_cool_thing;
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
 function animate() {
     requestAnimationFrame(animate);
-
     controls.update()
 
+    scene.traverse( function(obj) {
+        if (obj.userData.animated) {
+            obj.rotation.x += 0.01
+            obj.rotation.y += 0.01
+            obj.rotation.z += 0.01
+        }
+    
+    } );
+    
     renderer.render(scene, camera);
 };
 
-animate();
+console.log(scene.children)
 
 function load(filename, fn) {
     const mtlLoader = new MTLLoader()
@@ -73,14 +83,36 @@ function generate_board(x, y) {
 //     e.position.set(0, 0, 0);
 //     scene.add(e)
 // })
+
 generate_board(3, 3)
 
-load("Barrel", (e) => {
-    e.position.set(0, 0, 0)
+load("15x15_basic", (e) => {
+    e.position.set(2, 2, 2)
+    e.geometry.center()
     e.userData.draggable = true
+    e.userData.animated = true
     e.castShadow = true
     e.receiveShadow = true
     scene.add(e)
+    cool_thing = e
+})
+
+load("15x15_glass", (e) => {
+    e.position.set(2, 2, 2)
+    e.geometry.center()
+    e.material = new THREE.MeshPhysicalMaterial({  
+        roughness: 0.2,  
+        transmission: 1.0,  
+        thickness: 2,
+        clearcoat:0.3,
+    });
+    console.log(e.material)
+    e.userData.draggable = true
+    e.userData.animated = true
+    e.castShadow = true
+    e.receiveShadow = true
+    scene.add(e)
+    other_cool_thing = e
 })
 
 const mouse = new THREE.Vector2(-1, -1)
@@ -133,3 +165,5 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
 
 });
+
+animate();
