@@ -3,7 +3,7 @@ import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { DragControls } from "three/examples/jsm/controls/DragControls.js";
-import { Vector3 } from "three";
+import { PCFSoftShadowMap, Vector3 } from "three";
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -13,17 +13,21 @@ const renderer = new THREE.WebGLRenderer({
 
 const w = window.innerWidth;
 const h = window.innerHeight;
-const camera = new THREE.PerspectiveCamera(45, w / h, 1, 1000);
-camera.position.set(5, 10, 5);
+const camera = new THREE.PerspectiveCamera(45, w / h, 1, 1000)
+camera.position.set(5, 10, 5)
 
-renderer.setSize(w, h);
+renderer.setSize(w, h)
 
-const amb_light = new THREE.AmbientLight(0xffffff, 2.0);
-amb_light.position.set(0, 100, 100);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const amb_light = new THREE.AmbientLight(0xffffff, 2.0)
+amb_light.position.set(0, 100, 100)
 scene.add(amb_light)
 
-const dir_light = new THREE.DirectionalLight(0xffffff, 2.0);
-dir_light.position.set(0, 100, 50);
+const dir_light = new THREE.DirectionalLight(0xffffff, 2.0)
+dir_light.position.set(0, 100, 50)
+dir_light.castShadow = true
 scene.add(dir_light)
 
 const controls = new OrbitControls(camera, renderer.domElement)
@@ -39,15 +43,15 @@ function animate() {
 animate();
 
 function load(filename, fn) {
-    const mtlLoader = new MTLLoader();
-    mtlLoader.setPath('models/models/obj/');
+    const mtlLoader = new MTLLoader()
+    mtlLoader.setPath('models/models/obj/')
     mtlLoader.load(filename + ".mtl", function (materials) {
-        materials.preload();
-        const objLoader = new OBJLoader();
-        objLoader.setMaterials(materials);
-        objLoader.setPath('models/models/obj/');
+        materials.preload()
+        const objLoader = new OBJLoader()
+        objLoader.setMaterials(materials)
+        objLoader.setPath('models/models/obj/')
         objLoader.load(filename + ".obj", function (object) {
-            fn(object.children[0]);
+            fn(object.children[0])
         });
     });
 }
@@ -56,7 +60,9 @@ function generate_board(x, y) {
     for (let i = 0; i < x; i++) {
         for(let j = 0; j < y; j++) {
             load("ModularFloor", (e) => {
-                e.position.set(i * 2, 0, j * 2);
+                e.position.set(i * 2, 0, j * 2)
+                e.castShadow = true
+                e.receiveShadow = true
                 scene.add(e)
             })
         }
@@ -70,8 +76,10 @@ function generate_board(x, y) {
 generate_board(3, 3)
 
 load("Barrel", (e) => {
-    e.position.set(0, 0, 0);
+    e.position.set(0, 0, 0)
     e.userData.draggable = true
+    e.castShadow = true
+    e.receiveShadow = true
     scene.add(e)
 })
 
@@ -102,10 +110,10 @@ window.addEventListener('mouseup', () => {
 }, false);
 
 document.addEventListener('mousemove', (e) => {
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
     raycast.setFromCamera(mouse, camera);
-    intersection = raycast.intersectObjects(scene.children);
+    intersection = raycast.intersectObjects(scene.children)
     if(intersection.length > 0) {
         if(draggable) {
             let point = new Vector3()
@@ -119,9 +127,9 @@ document.addEventListener('mousemove', (e) => {
 }, false);
 
 window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight)
 
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix();
 
 });
