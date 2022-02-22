@@ -3,7 +3,7 @@ import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { DragControls } from "three/examples/jsm/controls/DragControls.js";
-import { CompressedPixelFormat, PCFSoftShadowMap, Vector3 } from "three";
+import { CompressedPixelFormat, PCFSoftShadowMap, TetrahedronBufferGeometry, Vector3 } from "three";
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -25,14 +25,46 @@ const amb_light = new THREE.AmbientLight(0xffffff, 2.0)
 amb_light.position.set(0, 100, 100)
 scene.add(amb_light)
 
-const dir_light = new THREE.PointLight(0x00ff00, 2.0)
-dir_light.position.set(2, 2, 2)
-dir_light.castShadow = true
-scene.add(dir_light)
-
 let cool_thing, other_cool_thing;
 
 const controls = new OrbitControls(camera, renderer.domElement)
+
+make_group()
+
+function make_group() {
+    let group = new THREE.Group();
+    load("15x15_basic", (e) => {
+        e.position.set(2, 2, 2)
+        e.geometry.center()
+        e.userData.draggable = true
+        e.userData.animated = true
+        e.castShadow = true
+        e.receiveShadow = true
+        group.add(e)
+    })
+    load("15x15_glass", (e) => {
+        e.position.set(2, 2, 2)
+        e.geometry.center()
+        e.material = new THREE.MeshPhysicalMaterial({  
+            roughness: 0.2,  
+            transmission: 1.0,  
+            thickness: 2,
+            clearcoat:0.3,
+        });
+        // console.log(e.material)
+        e.userData.draggable = true
+        e.userData.animated = true
+        e.castShadow = true
+        e.receiveShadow = true
+        group.add(e)
+    })
+    let light = new THREE.PointLight(0x00ff00, 2.0)
+    light.position.set(2, 2, 2)
+    light.castShadow = true
+    group.add(light)
+    console.log(group)
+    scene.add(group)
+}
 
 function animate() {
     requestAnimationFrame(animate);
@@ -44,13 +76,12 @@ function animate() {
             obj.rotation.y += 0.01
             obj.rotation.z += 0.01
         }
-    
     } );
     
     renderer.render(scene, camera);
 };
 
-console.log(scene.children)
+// console.log(scene.children)
 
 function load(filename, fn) {
     const mtlLoader = new MTLLoader()
@@ -86,34 +117,34 @@ function generate_board(x, y) {
 
 generate_board(3, 3)
 
-load("15x15_basic", (e) => {
-    e.position.set(2, 2, 2)
-    e.geometry.center()
-    e.userData.draggable = true
-    e.userData.animated = true
-    e.castShadow = true
-    e.receiveShadow = true
-    scene.add(e)
-    cool_thing = e
-})
+// load("15x15_basic", (e) => {
+//     e.position.set(2, 2, 2)
+//     e.geometry.center()
+//     e.userData.draggable = true
+//     e.userData.animated = true
+//     e.castShadow = true
+//     e.receiveShadow = true
+//     scene.add(e)
+//     cool_thing = e
+// })
 
-load("15x15_glass", (e) => {
-    e.position.set(2, 2, 2)
-    e.geometry.center()
-    e.material = new THREE.MeshPhysicalMaterial({  
-        roughness: 0.2,  
-        transmission: 1.0,  
-        thickness: 2,
-        clearcoat:0.3,
-    });
-    console.log(e.material)
-    e.userData.draggable = true
-    e.userData.animated = true
-    e.castShadow = true
-    e.receiveShadow = true
-    scene.add(e)
-    other_cool_thing = e
-})
+// load("15x15_glass", (e) => {
+//     e.position.set(2, 2, 2)
+//     e.geometry.center()
+//     e.material = new THREE.MeshPhysicalMaterial({  
+//         roughness: 0.2,  
+//         transmission: 1.0,  
+//         thickness: 2,
+//         clearcoat:0.3,
+//     });
+//     console.log(e.material)
+//     e.userData.draggable = true
+//     e.userData.animated = true
+//     e.castShadow = true
+//     e.receiveShadow = true
+//     scene.add(e)
+//     other_cool_thing = e
+// })
 
 const mouse = new THREE.Vector2(-1, -1)
 const raycast = new THREE.Raycaster();
@@ -128,6 +159,10 @@ window.addEventListener('mousedown', () => {
     if(intersection.length > 0) {
         if(intersection[0].object.userData.draggable) {
             draggable = intersection[0].object
+            if(draggable.parent instanceof THREE.Group)
+            {
+                draggable = draggable.parent
+            }
             controls.enableRotate = false
         }
     }
@@ -135,6 +170,7 @@ window.addEventListener('mousedown', () => {
 
 window.addEventListener('mouseup', () => {
     if(draggable) {
+        console.log(draggable)
         draggable.position.set(Math.round(draggable.position.x / 2) * 2, .3, Math.round(draggable.position.z / 2) * 2)
         draggable = false
         controls.enableRotate = true
