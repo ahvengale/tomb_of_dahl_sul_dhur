@@ -67,10 +67,11 @@ function make_group() {
         e.receiveShadow = true
         group.add(e)
     })
-    let light = new THREE.PointLight(0x00ff00, 1.0)
-    light.position.set(2, 2, 2)
+    let light = new THREE.PointLight(0x00ff00, 3.0, 6.0)
+    light.position.set(0, 2, 0)
     light.castShadow = true
     group.add(light)
+    group.position.set(6, 0, 6)
     console.log(group)
     scene.add(group)
 }
@@ -124,7 +125,7 @@ function generate_board(x, y) {
 //     scene.add(e)
 // })
 
-generate_board(3, 3)
+generate_board(7, 7)
 
 // load("15x15_basic", (e) => {
 //     e.position.set(2, 2, 2)
