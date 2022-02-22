@@ -3,6 +3,7 @@ import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { DragControls } from "three/examples/jsm/controls/DragControls.js";
+import { Vector3 } from "three";
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -65,35 +66,47 @@ load("Barrel", (e) => {
     scene.add(e)
 })
 
+const mouse = new THREE.Vector2(-1, -1)
+const raycast = new THREE.Raycaster();
+let intersection
+let draggable
 
-let dControls = new DragControls(obs, camera, renderer.domElement);
-
-dControls.addEventListener('dragstart', function (event) {
-    controls.enableRotate = false
-});
-
-dControls.addEventListener('dragend', function (event) {
-    controls.enableRotate = true
-    console.log(event.object)
-    event.object.position.set(Math.floor(event.object.position.x), Math.floor(event.object.position.y), Math.floor(event.object.position.z))
-});
-
-const mouse = new THREE.Vector2(-1, -1);
+const floor = new THREE.Plane(new Vector3(0, 1, 0), 0)
 
 window.addEventListener('mousedown', () => {
-    const raycast = new THREE.Raycaster();
-    raycast.setFromCamera(mouse, camera);
-    var intersection = raycast.intersectObjects(scene.children);
-    if (intersection.length > 0) {
-        // console.log(intersection[0])
-        handleClick(intersection[0]);
+    console.log('henlo')
+    console.log(intersection[0])
+    if(intersection.length > 0) {
+        if(intersection[0].object.userData.draggable) {
+            draggable = intersection[0].object
+            controls.enableRotate = false
+        }
     }
-});
+}, false);
+
+window.addEventListener('mouseup', () => {
+    if(draggable) {
+        draggable.position.set(Math.round(draggable.position.x / 2) * 2, .3, Math.round(draggable.position.z / 2) * 2)
+        draggable = false
+    }
+}, false);
 
 document.addEventListener('mousemove', (e) => {
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-});
+    raycast.setFromCamera(mouse, camera);
+    intersection = raycast.intersectObjects(scene.children);
+    if(intersection.length > 0) {
+        if(draggable) {
+            let point = new Vector3()
+            point = raycast.ray.intersectPlane(floor, point)
+            console.log(point)
+            draggable.position.x = point.x
+            draggable.position.z = point.z
+            draggable.position.y = 0.3
+        }
+    }
+}, false);
 
 window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -102,11 +115,3 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
 
 });
-
-function handleClick(e) {
-    if (e.object.userData.draggable) {
-        console.log(e)
-    }
-}
-
-
