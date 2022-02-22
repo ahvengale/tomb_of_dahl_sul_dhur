@@ -25,7 +25,7 @@ const amb_light = new THREE.AmbientLight(0xffffff, 2.0)
 amb_light.position.set(0, 100, 100)
 scene.add(amb_light)
 
-const dir_light = new THREE.PointLight(0xffffff, 2.0)
+const dir_light = new THREE.PointLight(0x00ff00, 2.0)
 dir_light.position.set(2, 2, 2)
 dir_light.castShadow = true
 scene.add(dir_light)
