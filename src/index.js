@@ -33,7 +33,7 @@ make_group()
 function make_group() {
     let group = new THREE.Group();
     load("15x15_basic", (e) => {
-        e.position.set(2, 2, 2)
+        e.position.set(0, 2, 0)
         e.geometry.center()
         e.userData.draggable = true
         e.userData.animated = true
@@ -42,7 +42,7 @@ function make_group() {
         group.add(e)
     })
     load("15x15_emissive", (e) => {
-        e.position.set(2, 2, 2)
+        e.position.set(0, 2, 0)
         e.geometry.center()
         e.material = new THREE.MeshBasicMaterial({color: 0x00ff00})
         e.userData.draggable = true
@@ -52,7 +52,7 @@ function make_group() {
         group.add(e)
     })
     load("15x15_glass", (e) => {
-        e.position.set(2, 2, 2)
+        e.position.set(0, 2, 0)
         e.geometry.center()
         e.material = new THREE.MeshPhysicalMaterial({  
             roughness: 0.2,  
