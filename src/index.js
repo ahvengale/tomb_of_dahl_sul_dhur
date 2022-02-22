@@ -14,12 +14,12 @@ const h = window.innerHeight;
 const aspect_ratio = w / h;
 const view_size = 5;
 const camera = new THREE.PerspectiveCamera(45, w / h, 1, 1000);
-camera.position.set(5, 5, 5);
-camera.lookAt(scene.position);
+camera.position.set(5, 10, 5);
+
 renderer.setSize(w, h);
 
 const amb_light = new THREE.AmbientLight(0xffffff, 2.0);
-amb_light.position.set(0, 0, 0);
+amb_light.position.set(0, 100, 100);
 scene.add(amb_light)
 
 const dir_light = new THREE.DirectionalLight(0xffffff, 2.0);
@@ -54,6 +54,11 @@ function load(filename, fn) {
 
 
 load("base_plate", (e) => {
+    e.position.set(0, 0, 0);
+    scene.add(e)
+})
+
+load("15x15x31_Tower", (e) => {
     e.position.set(0, 0, 0);
     scene.add(e)
 })
