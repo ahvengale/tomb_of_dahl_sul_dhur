@@ -1,11 +1,12 @@
 {
   "name": "tomb_of_dahl_sul_dhur",
   "version": "1.0.0",
-  "description": "OpenGL is fun",
-  "main": "app.js",
+  "description": "uwu",
+  "private": true,
   "scripts": {
-    "test": "set DEBUG=express:* & node App.js",
-    "start": "node App.js"
+    "build": "webpack & node App.mjs",
+    "test": "set DEBUG=express:* & node App.mjs",
+    "start": "node App.mjs"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,10 @@
   "dependencies": {
     "express": "^4.17.3",
     "helmet": "^5.0.2",
-    "three": "^0.137.5",
-    "webpack": "^5.69.1"
+    "three": "^0.137.5"
+  },
+  "devDependencies": {
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
   }
 }
