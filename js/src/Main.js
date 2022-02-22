@@ -77,7 +77,7 @@ window.addEventListener( 'mousedown', () => {
     raycast.setFromCamera( mouse, camera );
     var intersection = raycast.intersectObjects( scene.children );
     if (intersection.length > 0) {
-        console.log( intersection[0] )
+        // console.log( intersection[0] )
         intersection[0].object.visible = !intersection[0].object.visible
     }
 });

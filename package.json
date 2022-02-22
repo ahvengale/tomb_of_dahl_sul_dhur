@@ -20,6 +20,7 @@
   "dependencies": {
     "express": "^4.17.3",
     "helmet": "^5.0.2",
-    "three": "^0.137.5"
+    "three": "^0.137.5",
+    "webpack": "^5.69.1"
   }
 }
