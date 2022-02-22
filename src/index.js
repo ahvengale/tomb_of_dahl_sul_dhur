@@ -52,17 +52,26 @@ function load(filename, fn) {
     });
 }
 
-let obs = []
+function generate_board(x, y) {
+    for (let i = 0; i < x; i++) {
+        for(let j = 0; j < y; j++) {
+            load("ModularFloor", (e) => {
+                e.position.set(i * 2, 0, j * 2);
+                scene.add(e)
+            })
+        }
+    }
+}
 
-load("ModularFloor", (e) => {
-    e.position.set(0, 0, 0);
-    scene.add(e)
-})
+// load("ModularFloor", (e) => {
+//     e.position.set(0, 0, 0);
+//     scene.add(e)
+// })
+generate_board(3, 3)
 
 load("Barrel", (e) => {
     e.position.set(0, 0, 0);
     e.userData.draggable = true
-    obs.push(e)
     scene.add(e)
 })
 
@@ -88,6 +97,7 @@ window.addEventListener('mouseup', () => {
     if(draggable) {
         draggable.position.set(Math.round(draggable.position.x / 2) * 2, .3, Math.round(draggable.position.z / 2) * 2)
         draggable = false
+        controls.enableRotate = true
     }
 }, false);
 
