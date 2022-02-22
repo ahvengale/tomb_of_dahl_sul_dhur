@@ -18,12 +18,11 @@ camera.position.set(5, 10, 5)
 
 renderer.setSize(w, h)
 
+const light = new THREE.AmbientLight(0xffffff, 0.1)
+scene.add(light)
+
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-const amb_light = new THREE.AmbientLight(0xffffff, 2.0)
-amb_light.position.set(0, 100, 100)
-scene.add(amb_light)
 
 let cool_thing, other_cool_thing;
 
@@ -42,6 +41,16 @@ function make_group() {
         e.receiveShadow = true
         group.add(e)
     })
+    load("15x15_emissive", (e) => {
+        e.position.set(2, 2, 2)
+        e.geometry.center()
+        e.material = new THREE.MeshBasicMaterial({color: 0x00ff00})
+        e.userData.draggable = true
+        e.userData.animated = true
+        e.castShadow = false
+        e.receiveShadow = false
+        group.add(e)
+    })
     load("15x15_glass", (e) => {
         e.position.set(2, 2, 2)
         e.geometry.center()
@@ -58,7 +67,7 @@ function make_group() {
         e.receiveShadow = true
         group.add(e)
     })
-    let light = new THREE.PointLight(0x00ff00, 2.0)
+    let light = new THREE.PointLight(0x00ff00, 1.0)
     light.position.set(2, 2, 2)
     light.castShadow = true
     group.add(light)
