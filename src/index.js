@@ -2,8 +2,7 @@ import * as THREE from "three";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { DragControls } from "three/examples/jsm/controls/DragControls.js";
-import { CompressedPixelFormat, PCFSoftShadowMap, TetrahedronBufferGeometry, Vector3 } from "three";
+import { PCFSoftShadowMap, Vector3 } from "three";
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
