@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { DragControls } from "three/examples/jsm/controls/DragControls.js";
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -50,6 +51,7 @@ function load(filename, fn) {
     });
 }
 
+let obs = []
 
 load("ModularFloor", (e) => {
     e.position.set(0, 0, 0);
@@ -59,8 +61,23 @@ load("ModularFloor", (e) => {
 load("Barrel", (e) => {
     e.position.set(0, 0, 0);
     e.userData.draggable = true
+    obs.push(e)
     scene.add(e)
 })
+
+
+let dControls = new DragControls(obs, camera, renderer.domElement);
+
+dControls.addEventListener('dragstart', function (event) {
+    controls.enableRotate = false
+
+});
+
+dControls.addEventListener('dragend', function (event) {
+    controls.enableRotate = true
+
+
+});
 
 const mouse = new THREE.Vector2(-1, -1);
 
@@ -88,7 +105,7 @@ window.addEventListener('resize', () => {
 });
 
 function handleClick(e) {
-    if(e.object.userData.draggable) {
+    if (e.object.userData.draggable) {
         console.log(e)
     }
 }
