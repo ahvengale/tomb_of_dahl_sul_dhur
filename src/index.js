@@ -70,13 +70,12 @@ let dControls = new DragControls(obs, camera, renderer.domElement);
 
 dControls.addEventListener('dragstart', function (event) {
     controls.enableRotate = false
-
 });
 
 dControls.addEventListener('dragend', function (event) {
     controls.enableRotate = true
-
-
+    console.log(event.object)
+    event.object.position.set(Math.floor(event.object.position.x), Math.floor(event.object.position.y), Math.floor(event.object.position.z))
 });
 
 const mouse = new THREE.Vector2(-1, -1);
