@@ -74,8 +74,8 @@ let draggable
 const floor = new THREE.Plane(new Vector3(0, 1, 0), 0)
 
 window.addEventListener('mousedown', () => {
-    console.log('henlo')
-    console.log(intersection[0])
+    // console.log('henlo')
+    // console.log(intersection[0])
     if(intersection.length > 0) {
         if(intersection[0].object.userData.draggable) {
             draggable = intersection[0].object
@@ -100,7 +100,7 @@ document.addEventListener('mousemove', (e) => {
         if(draggable) {
             let point = new Vector3()
             point = raycast.ray.intersectPlane(floor, point)
-            console.log(point)
+            // console.log(point)
             draggable.position.x = point.x
             draggable.position.z = point.z
             draggable.position.y = 0.3
