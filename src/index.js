@@ -2,9 +2,8 @@ import * as THREE from "three";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { DragControls } from "three/examples/jsm/controls/DragControls.js";
-import { CompressedPixelFormat, PCFSoftShadowMap, TetrahedronBufferGeometry, Vector3 } from "three";
-import { GridHelper } from "three";
+import { Vector3 } from "three";
+
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -19,13 +18,11 @@ camera.position.set(5, 10, 5)
 
 renderer.setSize(w, h)
 
-const light = new THREE.AmbientLight(0xffffff, 1.0)
+const light = new THREE.AmbientLight(0xffffff, 2.0)
 scene.add(light)
 
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-let cool_thing, other_cool_thing;
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
@@ -122,6 +119,7 @@ function generate_board(x, y) {
                 e.position.set(i * 2, 0, j * 2)
                 e.castShadow = true
                 e.receiveShadow = true
+                e.material[0].color.set(0x0f0f0f)
                 boardGroup.add(e)
             })
         }
@@ -148,7 +146,7 @@ const floor = new THREE.Plane(new Vector3(0, 1, 0), 0)
 let movableTile = []
 
 function findAvailable(draggable) {
-    
+
 }
 
 window.addEventListener('mousedown', () => {
@@ -158,10 +156,8 @@ window.addEventListener('mousedown', () => {
         if (intersection[0].object.userData.draggable) {
             // console.log(original_location)
             draggable = intersection[0].object
-            console.log(draggable)
             if (draggable.parent instanceof THREE.Group) {
                 draggable = draggable.parent
-                console.log(draggable)
                 original_location = intersection[0].object.parent.position.clone()
             }
             else {
@@ -169,16 +165,14 @@ window.addEventListener('mousedown', () => {
             }
             controls.enableRotate = false
             let range = draggable.userData.movement
-            console.log(draggable)
-            console.log(range)
             for (let i = 0; i < boardGroup.children.length; i++) {
                 if (original_location.distanceTo(boardGroup.children[i].position) <= range * 2) {
                     movableTile.push(boardGroup.children[i])
                 }
             }
             console.log(movableTile)
-            for(var i = 0; i < movableTile.length; i++) {
-                movableTile[i].visible = false
+            for (var i = 0; i < movableTile.length; i++) {
+                movableTile[i].material[0].color.set(0x75b07b)
             }
         }
     }
@@ -201,8 +195,8 @@ window.addEventListener('mouseup', () => {
         }
         draggable = false
         controls.enableRotate = true
-        for(var i = 0; i < movableTile.length; i++) {
-            movableTile[i].visible = true
+        for (var i = 0; i < movableTile.length; i++) {
+            movableTile[i].material[0].color.set(0x0f0f0f)
         }
         movableTile = []
     }
