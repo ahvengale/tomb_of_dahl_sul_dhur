@@ -19,7 +19,7 @@ camera.position.set(5, 10, 5)
 
 renderer.setSize(w, h)
 
-const light = new THREE.AmbientLight(0xffffff, 0.1)
+const light = new THREE.AmbientLight(0xffffff, 1.0)
 scene.add(light)
 
 renderer.shadowMap.enabled = true;
@@ -68,8 +68,7 @@ function make_group() {
         e.userData.animated = true
         e.castShadow = true
         e.receiveShadow = true
-        e.userData.health = 100;
-        e.userData.movement = 2;
+
         group.add(e)
     })
     let light = new THREE.PointLight(0xffffff, 3.0, 6.0)
@@ -77,6 +76,8 @@ function make_group() {
     light.castShadow = true
     group.add(light)
     group.position.set(6, 0, 6)
+    group.userData.health = 100;
+    group.userData.movement = 2;
     console.log(group)
     scene.add(group)
 }
@@ -136,7 +137,7 @@ generate_board(7, 7)
 const mouse = new THREE.Vector2(-1, -1)
 const raycast = new THREE.Raycaster();
 let intersection
-let draggable
+let draggable = new THREE.Object3D()
 
 let original_location = new THREE.Vector3()
 let new_position = new THREE.Vector3()
@@ -144,17 +145,10 @@ let new_position = new THREE.Vector3()
 
 const floor = new THREE.Plane(new Vector3(0, 1, 0), 0)
 
-function findAvailable(o_pos, r, fn) {
-    console.log(r)
-    let movableTile = []
-    let range = r
-    for (let i = 0; i < boardGroup.children.length; i++) {
-        if (o_pos.distanceTo(boardGroup.children[i].position) <= range * 2) {
-            console.log(boardGroup.children[i].position)
-            movableTile.push(boardGroup.children[i])
-        }
-    }
-    fn(movableTile)
+let movableTile = []
+
+function findAvailable(draggable) {
+    
 }
 
 window.addEventListener('mousedown', () => {
@@ -164,29 +158,28 @@ window.addEventListener('mousedown', () => {
         if (intersection[0].object.userData.draggable) {
             // console.log(original_location)
             draggable = intersection[0].object
+            console.log(draggable)
             if (draggable.parent instanceof THREE.Group) {
                 draggable = draggable.parent
+                console.log(draggable)
                 original_location = intersection[0].object.parent.position.clone()
-                console.log(intersection[0].object)
-                findAvailable(original_location, intersection[0].object.parent.userData.movement, (tiles) => {
-                    tiles.forEach(e => {
-                        console.log(e)
-                        e.material[0].color.set(0x000000)
-                        //e.material.color.set(0x000000)
-                    })
-                })
             }
             else {
                 original_location = intersection[0].object.position.clone()
-                findAvailable(original_location, intersection[0].object.userData.movement, (tiles) => {
-                    tiles.forEach(e => {
-                        console.log(e)
-                        e.material[0].color.set(0x000000)
-                        //e.material.color.set(0x000000)
-                    })
-                })
             }
             controls.enableRotate = false
+            let range = draggable.userData.movement
+            console.log(draggable)
+            console.log(range)
+            for (let i = 0; i < boardGroup.children.length; i++) {
+                if (original_location.distanceTo(boardGroup.children[i].position) <= range * 2) {
+                    movableTile.push(boardGroup.children[i])
+                }
+            }
+            console.log(movableTile)
+            for(var i = 0; i < movableTile.length; i++) {
+                movableTile[i].visible = false
+            }
         }
     }
 }, false);
@@ -194,8 +187,8 @@ window.addEventListener('mousedown', () => {
 window.addEventListener('mouseup', () => {
     if (draggable) {
         // console.log(draggable)
-        new_position.set(Math.round(draggable.position.x / 2) * 2, 0.3, Math.round(draggable.position.z / 2) * 2)
-        if (original_location.distanceTo(new_position) <= 4) {
+        new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
+        if (original_location.distanceTo(new_position) <= 5.5) {
             draggable.position.set(new_position.x, new_position.y, new_position.z)
 
             // console.log('just right')
@@ -208,6 +201,10 @@ window.addEventListener('mouseup', () => {
         }
         draggable = false
         controls.enableRotate = true
+        for(var i = 0; i < movableTile.length; i++) {
+            movableTile[i].visible = true
+        }
+        movableTile = []
     }
 }, false);
 
