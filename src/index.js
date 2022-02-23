@@ -188,7 +188,7 @@ window.addEventListener('mouseup', () => {
     if (draggable) {
         // console.log(draggable)
         new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
-        if (original_location.distanceTo(new_position) <= 5.5) {
+        if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2) {
             draggable.position.set(new_position.x, new_position.y, new_position.z)
 
             // console.log('just right')
