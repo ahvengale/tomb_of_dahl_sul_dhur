@@ -157,8 +157,8 @@ window.addEventListener('mousedown', () => {
                 }
             }
             for (var i = 0; i < movableTile.length; i++) {
-                let edgesMesh = new THREE.LineSegments(movableTile[i].geometry, new THREE.LineBasicMaterial({ color: 0x00ff00 }));
-                edgesMesh.position.set(movableTile[i].position.x, movableTile[i].position.y, movableTile[i].position.z)
+                let edgesMesh = new THREE.BoundingBoxHelper(movableTile[i]);
+                edgesMesh.material.color.set(0x00ff00)
                 scene.add(edgesMesh)
                 movableTile[i].userData.temp_mesh = edgesMesh
                 // movableTile[i].userData.original_color = movableTile[i].material[0].color.getHex()
