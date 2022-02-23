@@ -24,7 +24,7 @@ renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 // make light
-const light = new THREE.AmbientLight(0xffffff, 2.0)
+const light = new THREE.AmbientLight(0xffffff, 0.0)
 scene.add(light)
 
 // mouse defined for mousemove event
@@ -60,7 +60,7 @@ function make_group() {
     load("15x15_emissive", (e) => {
         e.position.set(0, 2, 0)
         e.geometry.center()
-        e.material = new THREE.MeshBasicMaterial({ color: 0xffffff })
+        e.material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
         e.userData.draggable = true
         e.userData.animated = true
         e.castShadow = false
@@ -84,7 +84,7 @@ function make_group() {
 
         group.add(e)
     })
-    let light = new THREE.PointLight(0xffffff, 3.0, 6.0)
+    let light = new THREE.PointLight(0x00ff00, 5.0, 8.0)
     light.position.set(0, 2, 0)
     light.castShadow = true
     group.add(light)
@@ -157,8 +157,12 @@ window.addEventListener('mousedown', () => {
                 }
             }
             for (var i = 0; i < movableTile.length; i++) {
-                movableTile[i].userData.original_color = movableTile[i].material[0].color.getHex()
-                movableTile[i].material[0].color.set(0x002200)
+                let edgesMesh = new THREE.LineSegments(movableTile[i].geometry, new THREE.MeshBasicMaterial());
+                edgesMesh.position.set(movableTile[i].position.x, movableTile[i].position.y, movableTile[i].position.z)
+                scene.add(edgesMesh)
+                movableTile[i].userData.temp_mesh = edgesMesh
+                // movableTile[i].userData.original_color = movableTile[i].material[0].color.getHex()
+                // movableTile[i].material[0].color.set(0x002200)
             }
         }
     }
@@ -176,7 +180,8 @@ window.addEventListener('mouseup', () => {
         draggable = false
         controls.enableRotate = true
         for (var i = 0; i < movableTile.length; i++) {
-            movableTile[i].material[0].color.set(movableTile[i].userData.original_color)
+            // movableTile[i].material[0].color.set(movableTile[i].userData.original_color)
+            scene.remove(movableTile[i].userData.temp_mesh)
         }
         movableTile = []
     }
