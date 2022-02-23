@@ -144,10 +144,10 @@ window.addEventListener('mousedown', () => {
             if(draggable.parent instanceof THREE.Group)
             {
                 draggable = draggable.parent
-                original_location = intersection[0].object.parent.position
+                original_location = intersection[0].object.parent.position.clone()
             }
             else {
-                original_location = intersection[0].object.position
+                original_location = intersection[0].object.position.clone()
             }
             controls.enableRotate = false
             console.log(original_location)
@@ -162,7 +162,7 @@ window.addEventListener('mouseup', () => {
         console.log('New: ' + new_position.x)
         console.log('Old: ' + original_location.x)
         console.log('Dist: ' + original_location.distanceTo(new_position))
-        if(original_location.distanceTo(new_position) < 4)
+        if(original_location.distanceTo(new_position) <= 4)
         {
             draggable.position.set(new_position.x, new_position.y, new_position.z)
             // console.log('just right')
