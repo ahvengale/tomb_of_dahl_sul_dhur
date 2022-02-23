@@ -11,24 +11,40 @@ const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector('#C'),
 });
 
+// create camera, set size, camera control
 const w = window.innerWidth;
 const h = window.innerHeight;
 const camera = new THREE.PerspectiveCamera(45, w / h, 1, 1000)
 camera.position.set(5, 10, 5)
-
 renderer.setSize(w, h)
+const controls = new OrbitControls(camera, renderer.domElement)
 
+// enable shadows
+renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
+
+// make light
 const light = new THREE.AmbientLight(0xffffff, 2.0)
 scene.add(light)
 
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-const controls = new OrbitControls(camera, renderer.domElement)
+// mouse defined for mousemove event
+const mouse = new THREE.Vector2(-1, -1)
 
 
+let boardGroup = new THREE.Group()
+
+// variables for raycasting and drag positions
+const raycast = new THREE.Raycaster()
+const floor = new THREE.Plane(new Vector3(0, 1, 0), 0)
+let intersection
+let draggable = new THREE.Object3D()
+let original_location = new THREE.Vector3()
+let new_position = new THREE.Vector3()
+let movableTile = []
 
 make_group()
+generate_board(7, 7)
+animate();
 
 function make_group() {
     let group = new THREE.Group();
@@ -75,12 +91,11 @@ function make_group() {
     group.position.set(6, 0, 6)
     group.userData.health = 100;
     group.userData.movement = 2;
-    console.log(group)
     scene.add(group)
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+    requestAnimationFrame(animate)
     controls.update()
 
     scene.traverse(function (obj) {
@@ -89,12 +104,10 @@ function animate() {
             obj.rotation.y += 0.01
             obj.rotation.z += 0.01
         }
-    });
+    })
 
-    renderer.render(scene, camera);
-};
-
-// console.log(scene.children)
+    renderer.render(scene, camera)
+}
 
 function load(filename, fn) {
     const mtlLoader = new MTLLoader()
@@ -110,8 +123,6 @@ function load(filename, fn) {
     });
 }
 
-let boardGroup = new THREE.Group();
-
 function generate_board(x, y) {
     for (let i = 0; i < x; i++) {
         for (let j = 0; j < y; j++) {
@@ -124,37 +135,12 @@ function generate_board(x, y) {
             })
         }
     }
-}
-
-scene.add(boardGroup)
-
-
-
-generate_board(7, 7)
-
-const mouse = new THREE.Vector2(-1, -1)
-const raycast = new THREE.Raycaster();
-let intersection
-let draggable = new THREE.Object3D()
-
-let original_location = new THREE.Vector3()
-let new_position = new THREE.Vector3()
-
-
-const floor = new THREE.Plane(new Vector3(0, 1, 0), 0)
-
-let movableTile = []
-
-function findAvailable(draggable) {
-
+    scene.add(boardGroup)
 }
 
 window.addEventListener('mousedown', () => {
-    // console.log('henlo')
-    // console.log(intersection[0])
     if (intersection.length > 0) {
         if (intersection[0].object.userData.draggable) {
-            // console.log(original_location)
             draggable = intersection[0].object
             if (draggable.parent instanceof THREE.Group) {
                 draggable = draggable.parent
@@ -170,39 +156,33 @@ window.addEventListener('mousedown', () => {
                     movableTile.push(boardGroup.children[i])
                 }
             }
-            console.log(movableTile)
             for (var i = 0; i < movableTile.length; i++) {
-                movableTile[i].material[0].color.set(0x75b07b)
+                movableTile[i].userData.original_color = movableTile[i].material[0].color.getHex()
+                movableTile[i].material[0].color.set(0x002200)
             }
         }
     }
-}, false);
+})
 
 window.addEventListener('mouseup', () => {
     if (draggable) {
-        // console.log(draggable)
         new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
         if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2) {
             draggable.position.set(new_position.x, new_position.y, new_position.z)
-
-            // console.log('just right')
-            // console.log(draggable.position)
         }
         else {
             draggable.position.set(original_location.x, original_location.y, original_location.z)
-            // console.log('too far')
-            // console.log(draggable.position)
         }
         draggable = false
         controls.enableRotate = true
         for (var i = 0; i < movableTile.length; i++) {
-            movableTile[i].material[0].color.set(0x0f0f0f)
+            movableTile[i].material[0].color.set(movableTile[i].userData.original_color)
         }
         movableTile = []
     }
-}, false);
+})
 
-document.addEventListener('mousemove', (e) => {
+window.addEventListener('mousemove', (e) => {
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
     raycast.setFromCamera(mouse, camera);
@@ -211,13 +191,12 @@ document.addEventListener('mousemove', (e) => {
         if (draggable) {
             let point = new Vector3()
             point = raycast.ray.intersectPlane(floor, point)
-            // console.log(point)
             draggable.position.x = point.x
             draggable.position.z = point.z
             draggable.position.y = 0.3
         }
     }
-}, false);
+})
 
 window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight)
@@ -225,6 +204,4 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix();
 
-});
-
-animate();
+})
