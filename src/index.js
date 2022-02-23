@@ -4,6 +4,7 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { DragControls } from "three/examples/jsm/controls/DragControls.js";
 import { CompressedPixelFormat, PCFSoftShadowMap, TetrahedronBufferGeometry, Vector3 } from "three";
+import { GridHelper } from "three";
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -28,6 +29,8 @@ let cool_thing, other_cool_thing;
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
+
+
 make_group()
 
 function make_group() {
@@ -44,7 +47,7 @@ function make_group() {
     load("15x15_emissive", (e) => {
         e.position.set(0, 2, 0)
         e.geometry.center()
-        e.material = new THREE.MeshBasicMaterial({color: 0x00ff00})
+        e.material = new THREE.MeshBasicMaterial({ color: 0xffffff })
         e.userData.draggable = true
         e.userData.animated = true
         e.castShadow = false
@@ -54,11 +57,11 @@ function make_group() {
     load("15x15_glass", (e) => {
         e.position.set(0, 2, 0)
         e.geometry.center()
-        e.material = new THREE.MeshPhysicalMaterial({  
-            roughness: 0.2,  
-            transmission: 1.0,  
+        e.material = new THREE.MeshPhysicalMaterial({
+            roughness: 0.2,
+            transmission: 1.0,
             thickness: 2,
-            clearcoat:0.3,
+            clearcoat: 0.3,
         });
         // console.log(e.material)
         e.userData.draggable = true
@@ -69,7 +72,7 @@ function make_group() {
         e.userData.movement = 2;
         group.add(e)
     })
-    let light = new THREE.PointLight(0x00ff00, 3.0, 6.0)
+    let light = new THREE.PointLight(0xffffff, 3.0, 6.0)
     light.position.set(0, 2, 0)
     light.castShadow = true
     group.add(light)
@@ -82,14 +85,14 @@ function animate() {
     requestAnimationFrame(animate);
     controls.update()
 
-    scene.traverse( function(obj) {
+    scene.traverse(function (obj) {
         if (obj.userData.animated) {
             obj.rotation.x += 0.01
             obj.rotation.y += 0.01
             obj.rotation.z += 0.01
         }
-    } );
-    
+    });
+
     renderer.render(scene, camera);
 };
 
@@ -109,18 +112,24 @@ function load(filename, fn) {
     });
 }
 
+let boardGroup = new THREE.Group();
+
 function generate_board(x, y) {
     for (let i = 0; i < x; i++) {
-        for(let j = 0; j < y; j++) {
+        for (let j = 0; j < y; j++) {
             load("ModularFloor", (e) => {
                 e.position.set(i * 2, 0, j * 2)
                 e.castShadow = true
                 e.receiveShadow = true
-                scene.add(e)
+                boardGroup.add(e)
             })
         }
     }
 }
+
+scene.add(boardGroup)
+
+
 
 generate_board(7, 7)
 
@@ -132,39 +141,63 @@ let draggable
 let original_location = new THREE.Vector3()
 let new_position = new THREE.Vector3()
 
+
 const floor = new THREE.Plane(new Vector3(0, 1, 0), 0)
+
+function findAvailable(o_pos, r, fn) {
+    console.log(r)
+    let movableTile = []
+    let range = r
+    for (let i = 0; i < boardGroup.children.length; i++) {
+        if (o_pos.distanceTo(boardGroup.children[i].position) <= range * 2) {
+            console.log(boardGroup.children[i].position)
+            movableTile.push(boardGroup.children[i])
+        }
+    }
+    fn(movableTile)
+}
 
 window.addEventListener('mousedown', () => {
     // console.log('henlo')
     // console.log(intersection[0])
-    if(intersection.length > 0) {
-        if(intersection[0].object.userData.draggable) {
+    if (intersection.length > 0) {
+        if (intersection[0].object.userData.draggable) {
             // console.log(original_location)
             draggable = intersection[0].object
-            if(draggable.parent instanceof THREE.Group)
-            {
+            if (draggable.parent instanceof THREE.Group) {
                 draggable = draggable.parent
                 original_location = intersection[0].object.parent.position.clone()
+                console.log(intersection[0].object)
+                findAvailable(original_location, intersection[0].object.parent.userData.movement, (tiles) => {
+                    tiles.forEach(e => {
+                        console.log(e)
+                        e.material[0].color.set(0x000000)
+                        //e.material.color.set(0x000000)
+                    })
+                })
             }
             else {
                 original_location = intersection[0].object.position.clone()
+                findAvailable(original_location, intersection[0].object.userData.movement, (tiles) => {
+                    tiles.forEach(e => {
+                        console.log(e)
+                        e.material[0].color.set(0x000000)
+                        //e.material.color.set(0x000000)
+                    })
+                })
             }
             controls.enableRotate = false
-            console.log(original_location)
         }
     }
 }, false);
 
 window.addEventListener('mouseup', () => {
-    if(draggable) {
+    if (draggable) {
         // console.log(draggable)
         new_position.set(Math.round(draggable.position.x / 2) * 2, 0.3, Math.round(draggable.position.z / 2) * 2)
-        console.log('New: ' + new_position.x)
-        console.log('Old: ' + original_location.x)
-        console.log('Dist: ' + original_location.distanceTo(new_position))
-        if(original_location.distanceTo(new_position) <= 4)
-        {
+        if (original_location.distanceTo(new_position) <= 4) {
             draggable.position.set(new_position.x, new_position.y, new_position.z)
+
             // console.log('just right')
             // console.log(draggable.position)
         }
@@ -183,8 +216,8 @@ document.addEventListener('mousemove', (e) => {
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
     raycast.setFromCamera(mouse, camera);
     intersection = raycast.intersectObjects(scene.children)
-    if(intersection.length > 0) {
-        if(draggable) {
+    if (intersection.length > 0) {
+        if (draggable) {
             let point = new Vector3()
             point = raycast.ray.intersectPlane(floor, point)
             // console.log(point)
