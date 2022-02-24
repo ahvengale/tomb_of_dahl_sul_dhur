@@ -194,8 +194,12 @@ window.addEventListener('mousedown', () => {
 window.addEventListener('mouseup', () => {
         if (draggable) {
             new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
-            if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2) {
+            if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2 && original_location.distanceTo(new_position) > 1.0) {
                 draggable.position.set(new_position.x, new_position.y, new_position.z)
+                moves -= 1
+                if(moves == 0) {
+                    take_turn()
+                }
             }
             else {
                 draggable.position.set(original_location.x, original_location.y, original_location.z)
@@ -207,10 +211,6 @@ window.addEventListener('mouseup', () => {
                 scene.remove(movableTile[i].userData.temp_mesh)
             }
             console.log(moves)
-            moves -= 1
-            if(moves == 0) {
-                take_turn()
-            }
             movableTile = []
         }
 })
