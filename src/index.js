@@ -24,7 +24,7 @@ renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 // make light
-const light = new THREE.AmbientLight(0xffffff, 0.0)
+const light = new THREE.AmbientLight(0xffffff, .6)
 scene.add(light)
 
 // mouse defined for mousemove event
@@ -42,11 +42,27 @@ let original_location = new THREE.Vector3()
 let new_position = new THREE.Vector3()
 let movableTile = []
 
-make_group()
+let turn_number = 1
+let number_players = 2
+let id = 1
+
+make_group(1, 0xff0000)
+make_group(2, 0x00ff00)
 generate_board(7, 7)
 animate();
 
-function make_group() {
+take_turn()
+
+function take_turn() {
+    console.log(turn_number)
+    turn_number += 1
+    if(turn_number > number_players) {
+        turn_number = 1
+    }
+    setTimeout(take_turn, 10000)
+}
+
+function make_group(player_id, color) {
     let group = new THREE.Group();
     load("15x15_basic", (e) => {
         e.position.set(0, 2, 0)
@@ -60,7 +76,7 @@ function make_group() {
     load("15x15_emissive", (e) => {
         e.position.set(0, 2, 0)
         e.geometry.center()
-        e.material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+        e.material = new THREE.MeshBasicMaterial({ color: color })
         e.userData.draggable = true
         e.userData.animated = true
         e.castShadow = false
@@ -81,16 +97,16 @@ function make_group() {
         e.userData.animated = true
         e.castShadow = true
         e.receiveShadow = true
-
         group.add(e)
     })
-    let light = new THREE.PointLight(0x00ff00, 5.0, 8.0)
+    let light = new THREE.PointLight(color, 5.0, 8.0)
     light.position.set(0, 2, 0)
     light.castShadow = true
     group.add(light)
     group.position.set(6, 0, 6)
     group.userData.health = 100;
     group.userData.movement = 2;
+    group.userData.player_id = player_id
     scene.add(group)
 }
 
@@ -139,51 +155,55 @@ function generate_board(x, y) {
 }
 
 window.addEventListener('mousedown', () => {
-    if (intersection.length > 0) {
-        if (intersection[0].object.userData.draggable) {
-            draggable = intersection[0].object
-            if (draggable.parent instanceof THREE.Group) {
-                draggable = draggable.parent
-                original_location = intersection[0].object.parent.position.clone()
-            }
-            else {
-                original_location = intersection[0].object.position.clone()
-            }
-            controls.enableRotate = false
-            let range = draggable.userData.movement
-            for (let i = 0; i < boardGroup.children.length; i++) {
-                if (original_location.distanceTo(boardGroup.children[i].position) <= range * 2) {
-                    movableTile.push(boardGroup.children[i])
+    if(id == turn_number) {
+        if (intersection.length > 0) {
+            if (intersection[0].object.userData.draggable) {
+                draggable = intersection[0].object
+                if (draggable.parent instanceof THREE.Group) {
+                    draggable = draggable.parent
                 }
-            }
-            for (var i = 0; i < movableTile.length; i++) {
-                let edgesMesh = new THREE.BoundingBoxHelper(movableTile[i]);
-                edgesMesh.material.color.set(0x00ff00)
-                scene.add(edgesMesh)
-                movableTile[i].userData.temp_mesh = edgesMesh
-                // movableTile[i].userData.original_color = movableTile[i].material[0].color.getHex()
-                // movableTile[i].material[0].color.set(0x002200)
+                console.log(draggable)
+                if(draggable.userData.player_id == id) {
+                    original_location = draggable.position.clone()
+                    controls.enableRotate = false
+                    let range = draggable.userData.movement
+                    for (let i = 0; i < boardGroup.children.length; i++) {
+                        if (original_location.distanceTo(boardGroup.children[i].position) <= range * 2) {
+                            movableTile.push(boardGroup.children[i])
+                        }
+                    }
+                    for (var i = 0; i < movableTile.length; i++) {
+                        let edgesMesh = new THREE.BoundingBoxHelper(movableTile[i]);
+                        edgesMesh.material.color.set(0x00ff00)
+                        scene.add(edgesMesh)
+                        movableTile[i].userData.temp_mesh = edgesMesh
+                        // movableTile[i].userData.original_color = movableTile[i].material[0].color.getHex()
+                        // movableTile[i].material[0].color.set(0x002200)
+                    }
+                }
             }
         }
     }
 })
 
 window.addEventListener('mouseup', () => {
-    if (draggable) {
-        new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
-        if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2) {
-            draggable.position.set(new_position.x, new_position.y, new_position.z)
+    if(id == turn_number) {
+        if (draggable) {
+            new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
+            if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2) {
+                draggable.position.set(new_position.x, new_position.y, new_position.z)
+            }
+            else {
+                draggable.position.set(original_location.x, original_location.y, original_location.z)
+            }
+            draggable = false
+            controls.enableRotate = true
+            for (var i = 0; i < movableTile.length; i++) {
+                // movableTile[i].material[0].color.set(movableTile[i].userData.original_color)
+                scene.remove(movableTile[i].userData.temp_mesh)
+            }
+            movableTile = []
         }
-        else {
-            draggable.position.set(original_location.x, original_location.y, original_location.z)
-        }
-        draggable = false
-        controls.enableRotate = true
-        for (var i = 0; i < movableTile.length; i++) {
-            // movableTile[i].material[0].color.set(movableTile[i].userData.original_color)
-            scene.remove(movableTile[i].userData.temp_mesh)
-        }
-        movableTile = []
     }
 })
 
