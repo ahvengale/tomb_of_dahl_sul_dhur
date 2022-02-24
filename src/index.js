@@ -42,12 +42,13 @@ let original_location = new THREE.Vector3()
 let new_position = new THREE.Vector3()
 let movableTile = []
 
-let turn_number = 1
+let turn_number = 0
 let number_players = 2
 let id = 1
+let moves = 3
 
-make_group(1, 0xff0000)
-make_group(2, 0x00ff00)
+make_group(1, 0xff0000, 12, 12)
+make_group(2, 0x00ff00, 0, 0)
 generate_board(7, 7)
 animate();
 
@@ -59,15 +60,21 @@ function take_turn() {
     if(turn_number > number_players) {
         turn_number = 1
     }
-    setTimeout(take_turn, 10000)
+    if(turn_number != id) {
+        // enemy  ai turn
+        setTimeout(take_turn, 10000)
+    }
+    else {
+        // player turn
+        moves = 3
+    }
 }
 
-function make_group(player_id, color) {
+function make_group(player_id, color, x, z) {
     let group = new THREE.Group();
     load("15x15_basic", (e) => {
         e.position.set(0, 2, 0)
         e.geometry.center()
-        e.userData.draggable = true
         e.userData.animated = true
         e.castShadow = true
         e.receiveShadow = true
@@ -77,7 +84,6 @@ function make_group(player_id, color) {
         e.position.set(0, 2, 0)
         e.geometry.center()
         e.material = new THREE.MeshBasicMaterial({ color: color })
-        e.userData.draggable = true
         e.userData.animated = true
         e.castShadow = false
         e.receiveShadow = false
@@ -93,7 +99,6 @@ function make_group(player_id, color) {
             clearcoat: 0.3,
         });
         // console.log(e.material)
-        e.userData.draggable = true
         e.userData.animated = true
         e.castShadow = true
         e.receiveShadow = true
@@ -103,10 +108,14 @@ function make_group(player_id, color) {
     light.position.set(0, 2, 0)
     light.castShadow = true
     group.add(light)
-    group.position.set(6, 0, 6)
+    group.position.set(x, 0, z)
     group.userData.health = 100;
     group.userData.movement = 2;
     group.userData.player_id = player_id
+    if(group.userData.player_id == id) {
+        group.userData.draggable = true
+    }
+    console.log(group)
     scene.add(group)
 }
 
@@ -156,30 +165,26 @@ function generate_board(x, y) {
 
 window.addEventListener('mousedown', () => {
     if(id == turn_number) {
+        console.log("your turn")
         if (intersection.length > 0) {
-            if (intersection[0].object.userData.draggable) {
-                draggable = intersection[0].object
-                if (draggable.parent instanceof THREE.Group) {
-                    draggable = draggable.parent
-                }
+            if (intersection[0].object.parent.userData.draggable) {
+                draggable = intersection[0].object.parent
                 console.log(draggable)
-                if(draggable.userData.player_id == id) {
-                    original_location = draggable.position.clone()
-                    controls.enableRotate = false
-                    let range = draggable.userData.movement
-                    for (let i = 0; i < boardGroup.children.length; i++) {
-                        if (original_location.distanceTo(boardGroup.children[i].position) <= range * 2) {
-                            movableTile.push(boardGroup.children[i])
-                        }
+                original_location = draggable.position.clone()
+                controls.enableRotate = false
+                let range = draggable.userData.movement
+                for (let i = 0; i < boardGroup.children.length; i++) {
+                    if (original_location.distanceTo(boardGroup.children[i].position) <= range * 2) {
+                        movableTile.push(boardGroup.children[i])
                     }
-                    for (var i = 0; i < movableTile.length; i++) {
-                        let edgesMesh = new THREE.BoundingBoxHelper(movableTile[i]);
-                        edgesMesh.material.color.set(0x00ff00)
-                        scene.add(edgesMesh)
-                        movableTile[i].userData.temp_mesh = edgesMesh
-                        // movableTile[i].userData.original_color = movableTile[i].material[0].color.getHex()
-                        // movableTile[i].material[0].color.set(0x002200)
-                    }
+                }
+                for (var i = 0; i < movableTile.length; i++) {
+                    let edgesMesh = new THREE.BoundingBoxHelper(movableTile[i]);
+                    edgesMesh.material.color.set(0x00ff00)
+                    scene.add(edgesMesh)
+                    movableTile[i].userData.temp_mesh = edgesMesh
+                    // movableTile[i].userData.original_color = movableTile[i].material[0].color.getHex()
+                    // movableTile[i].material[0].color.set(0x002200)
                 }
             }
         }
@@ -187,7 +192,6 @@ window.addEventListener('mousedown', () => {
 })
 
 window.addEventListener('mouseup', () => {
-    if(id == turn_number) {
         if (draggable) {
             new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
             if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2) {
@@ -202,9 +206,13 @@ window.addEventListener('mouseup', () => {
                 // movableTile[i].material[0].color.set(movableTile[i].userData.original_color)
                 scene.remove(movableTile[i].userData.temp_mesh)
             }
+            console.log(moves)
+            moves -= 1
+            if(moves == 0) {
+                take_turn()
+            }
             movableTile = []
         }
-    }
 })
 
 window.addEventListener('mousemove', (e) => {
