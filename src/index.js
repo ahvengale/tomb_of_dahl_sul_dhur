@@ -46,8 +46,12 @@ let turn_number = 0
 let number_players = 2
 let id = 1
 let moves = 3
+let player_units = []
 
 make_group(1, 0xff0000, 12, 12)
+make_group(1, 0xff0000, 10, 10)
+make_group(1, 0xff0000, 10, 12)
+make_group(1, 0xff0000, 12, 10)
 make_group(2, 0x00ff00, 0, 0)
 generate_board(7, 7)
 animate();
@@ -66,7 +70,10 @@ function take_turn() {
     }
     else {
         // player turn
-        moves = 3
+        for(let elem in player_units) {
+            player_units[elem].userData.movable = true
+        }
+        moves = player_units.length
     }
 }
 
@@ -111,9 +118,11 @@ function make_group(player_id, color, x, z) {
     group.position.set(x, 0, z)
     group.userData.health = 100;
     group.userData.movement = 2;
+    group.userData.movable = true
     group.userData.player_id = player_id
     if(group.userData.player_id == id) {
         group.userData.draggable = true
+        player_units.push(group)
     }
     console.log(group)
     scene.add(group)
@@ -166,8 +175,9 @@ function generate_board(x, y) {
 window.addEventListener('mousedown', () => {
     if(id == turn_number) {
         console.log("your turn")
+        // console.log(intersection[0].object.parent.userData.movable)
         if (intersection.length > 0) {
-            if (intersection[0].object.parent.userData.draggable) {
+            if (intersection[0].object.parent.userData.draggable && intersection[0].object.parent.userData.movable) {
                 draggable = intersection[0].object.parent
                 console.log(draggable)
                 original_location = draggable.position.clone()
@@ -204,6 +214,7 @@ window.addEventListener('mouseup', () => {
             else {
                 draggable.position.set(original_location.x, original_location.y, original_location.z)
             }
+            draggable.userData.movable = false
             draggable = false
             controls.enableRotate = true
             for (var i = 0; i < movableTile.length; i++) {
