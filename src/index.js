@@ -48,12 +48,15 @@ let id = 1
 let moves = 3
 let player_units = []
 
-make_group(1, 0xff0000, 12, 12)
-make_group(1, 0xff0000, 10, 10)
-make_group(1, 0xff0000, 10, 12)
-make_group(1, 0xff0000, 12, 10)
-make_group(2, 0x00ff00, 0, 0)
+make_group(1, 0x00ff00, 12, 12)
+make_group(1, 0x00ff00, 10, 10)
+make_group(1, 0x00ff00, 10, 12)
+make_group(1, 0x00ff00, 12, 10)
+
+make_group(2, 0xff0000, 0, 0)
+
 generate_board(7, 7)
+
 animate();
 
 take_turn()
@@ -164,6 +167,7 @@ function generate_board(x, y) {
                 e.position.set(i * 2, 0, j * 2)
                 e.castShadow = true
                 e.receiveShadow = true
+                e.userData.tile = true
                 e.material[0].color.set(0x0f0f0f)
                 boardGroup.add(e)
             })
@@ -202,14 +206,28 @@ window.addEventListener('mousedown', () => {
 })
 
 window.addEventListener('mouseup', () => {
+    let occupied = false
         if (draggable) {
             new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
             if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2 && original_location.distanceTo(new_position) > 1.0) {
-                draggable.position.set(new_position.x, new_position.y, new_position.z)
-                moves -= 1
-                draggable.userData.movable = false
-                if(moves == 0) {
-                    take_turn()
+                for(let i = 0; i < scene.children.length; i++) {
+                    console.log(scene.children[i])
+                    console.log(scene.children[i].position.distanceTo(new_position))
+                    if(scene.children[i].position.distanceTo(new_position) <= 0.1 && !scene.children[i].userData.tile) {
+                        occupied = true
+                        console.log(occupied)
+                    }
+                }
+                if(!occupied) {
+                    draggable.position.set(new_position.x, new_position.y, new_position.z)
+                    moves -= 1
+                    draggable.userData.movable = false
+                    if(moves == 0) {
+                        take_turn()
+                    }
+                }
+                else {
+                    draggable.position.set(original_location.x, original_location.y, original_location.z)
                 }
             }
             else {
