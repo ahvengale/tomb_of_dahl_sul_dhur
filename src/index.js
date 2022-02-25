@@ -207,6 +207,7 @@ window.addEventListener('mouseup', () => {
             if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2 && original_location.distanceTo(new_position) > 1.0) {
                 draggable.position.set(new_position.x, new_position.y, new_position.z)
                 moves -= 1
+                draggable.userData.movable = false
                 if(moves == 0) {
                     take_turn()
                 }
@@ -214,7 +215,6 @@ window.addEventListener('mouseup', () => {
             else {
                 draggable.position.set(original_location.x, original_location.y, original_location.z)
             }
-            draggable.userData.movable = false
             draggable = false
             controls.enableRotate = true
             for (var i = 0; i < movableTile.length; i++) {
