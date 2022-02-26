@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/demonmunchies/tomb_of_dahl_sul_dhur#readme",
   "dependencies": {
+    "dat.gui": "^0.7.9",
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "three": "^0.137.5"

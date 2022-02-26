@@ -3,6 +3,7 @@ import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Vector3 } from "three";
+import gui from "./Details.js"
 
 
 //create 3 required objects: scene, camera, and renderer
@@ -25,7 +26,19 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 // make light
 const light = new THREE.AmbientLight(0xffffff, .6)
+
+const sun = new THREE.PointLight(0xffffff, 1, 50, 2);
+sun.position.set(20, 10, 20);
+
+gui.add(sun, 'intensity', 1, 10, .1)
+
+scene.add(gui);
+scene.add(sun);
 scene.add(light)
+
+const sphereSize = 1;
+const pointLightHelper = new THREE.PointLightHelper(sun, sphereSize);
+scene.add(pointLightHelper);
 
 // mouse defined for mousemove event
 const mouse = new THREE.Vector2(-1, -1)
@@ -64,16 +77,16 @@ take_turn()
 function take_turn() {
     console.log(turn_number)
     turn_number += 1
-    if(turn_number > number_players) {
+    if (turn_number > number_players) {
         turn_number = 1
     }
-    if(turn_number != id) {
+    if (turn_number != id) {
         // enemy  ai turn
         setTimeout(take_turn, 10000)
     }
     else {
         // player turn
-        for(let elem in player_units) {
+        for (let elem in player_units) {
             player_units[elem].userData.movable = true
         }
         moves = player_units.length
@@ -123,7 +136,7 @@ function make_group(player_id, color, x, z) {
     group.userData.movement = 2;
     group.userData.movable = true
     group.userData.player_id = player_id
-    if(group.userData.player_id == id) {
+    if (group.userData.player_id == id) {
         group.userData.draggable = true
         player_units.push(group)
     }
@@ -177,7 +190,7 @@ function generate_board(x, y) {
 }
 
 window.addEventListener('mousedown', () => {
-    if(id == turn_number) {
+    if (id == turn_number) {
         console.log("your turn")
         // console.log(intersection[0].object.parent.userData.movable)
         if (intersection.length > 0) {
@@ -207,41 +220,41 @@ window.addEventListener('mousedown', () => {
 
 window.addEventListener('mouseup', () => {
     let occupied = false
-        if (draggable) {
-            new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
-            if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2 && original_location.distanceTo(new_position) > 1.0) {
-                for(let i = 0; i < scene.children.length; i++) {
-                    console.log(scene.children[i])
-                    console.log(scene.children[i].position.distanceTo(new_position))
-                    if(scene.children[i].position.distanceTo(new_position) <= 0.1 && !scene.children[i].userData.tile) {
-                        occupied = true
-                        console.log(occupied)
-                    }
+    if (draggable) {
+        new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
+        if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2 && original_location.distanceTo(new_position) > 1.0) {
+            for (let i = 0; i < scene.children.length; i++) {
+                console.log(scene.children[i])
+                console.log(scene.children[i].position.distanceTo(new_position))
+                if (scene.children[i].position.distanceTo(new_position) <= 0.1 && !scene.children[i].userData.tile) {
+                    occupied = true
+                    console.log(occupied)
                 }
-                if(!occupied) {
-                    draggable.position.set(new_position.x, new_position.y, new_position.z)
-                    moves -= 1
-                    draggable.userData.movable = false
-                    if(moves == 0) {
-                        take_turn()
-                    }
-                }
-                else {
-                    draggable.position.set(original_location.x, original_location.y, original_location.z)
+            }
+            if (!occupied) {
+                draggable.position.set(new_position.x, new_position.y, new_position.z)
+                moves -= 1
+                draggable.userData.movable = false
+                if (moves == 0) {
+                    take_turn()
                 }
             }
             else {
                 draggable.position.set(original_location.x, original_location.y, original_location.z)
             }
-            draggable = false
-            controls.enableRotate = true
-            for (var i = 0; i < movableTile.length; i++) {
-                // movableTile[i].material[0].color.set(movableTile[i].userData.original_color)
-                scene.remove(movableTile[i].userData.temp_mesh)
-            }
-            console.log(moves)
-            movableTile = []
         }
+        else {
+            draggable.position.set(original_location.x, original_location.y, original_location.z)
+        }
+        draggable = false
+        controls.enableRotate = true
+        for (var i = 0; i < movableTile.length; i++) {
+            // movableTile[i].material[0].color.set(movableTile[i].userData.original_color)
+            scene.remove(movableTile[i].userData.temp_mesh)
+        }
+        console.log(moves)
+        movableTile = []
+    }
 })
 
 window.addEventListener('mousemove', (e) => {
