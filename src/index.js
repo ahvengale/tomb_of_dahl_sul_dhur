@@ -24,7 +24,7 @@ renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 // make light
-const light = new THREE.AmbientLight(0xffffff, .6)
+const light = new THREE.AmbientLight(0xffffff, 3.0)
 
 const sun = new THREE.PointLight(0xffffff, 1, 50, 2);
 sun.position.set(20, 10, 20);
@@ -62,10 +62,10 @@ let moves = 3
 let p1 = new Player(1, 0x00ff00, 12, 12)
 scene.add(p1.createPlayer())
 
-let p2 = new Player(2, 0xff0000, 0, 0)
-scene.add(p2.createPlayer())
+// let p2 = new Player(2, 0xff0000, 0, 0)
+// scene.add(p2.createPlayer())
 
-players.push(p1, p2)
+players.push(p1)
 
 generate_board(7, 7)
 
@@ -104,13 +104,11 @@ function take_turn() {
     }
 }
 
-
 const addBtn = document.getElementById("AddUnit")
 addBtn.addEventListener("click", () => {
     scene.add(p1.createPlayer())
     take_turn()
 })
-
 
 function animate() {
     requestAnimationFrame(animate)
@@ -127,17 +125,16 @@ function animate() {
     renderer.render(scene, camera)
 }
 
-
-
 function generate_board(x, y) {
     for (let i = 0; i < x; i++) {
         for (let j = 0; j < y; j++) {
-            load("ModularFloor", (e) => {
+            load("grass_tile_base", (e) => {
                 e.position.set(i * 2, 0, j * 2)
                 e.castShadow = true
                 e.receiveShadow = true
                 e.userData.tile = true
-                e.material[0].color.set(0x0f0f0f)
+                e.scale.set(1.33, 1.33, 1.33)
+                // e.material[0].color.set(0x0f0f0f)
                 boardGroup.add(e)
             })
         }
