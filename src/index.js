@@ -2,8 +2,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Vector3 } from "three";
 import gui from "./Details.js"
-import load from "./Loader"
 import Player from "./Player.js";
+import MapMaker from "./MapMaker.js";
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -53,9 +53,6 @@ scene.add(pointLightHelper);
 // mouse defined for mousemove event
 const mouse = new THREE.Vector2(-1, -1)
 
-
-let boardGroup = new THREE.Group()
-
 // variables for raycasting and drag positions
 const raycast = new THREE.Raycaster()
 const floor = new THREE.Plane(new Vector3(0, 1, 0), 0)
@@ -64,7 +61,6 @@ let draggable = new THREE.Object3D()
 let original_location = new THREE.Vector3()
 let new_position = new THREE.Vector3()
 let movableTile = []
-
 let turn_number = 0
 let id = 1;
 let players = []
@@ -78,7 +74,14 @@ scene.add(p1.createPlayer())
 
 players.push(p1)
 
+<<<<<<< HEAD
 generate_board(20, 20)
+=======
+const MAP = new MapMaker()
+let tiles = await MAP.generate("map1")
+scene.add(tiles)
+
+>>>>>>> 3979244b7a5503075453df5feecd32fd8e7a9348
 
 animate();
 
@@ -102,6 +105,7 @@ function take_turn() {
 
     let units = currentPlayer.getPlayerUnits().length;
 
+    //UI showing current player and number of units active
     document.getElementById("Player").innerText = turn_number
     document.getElementById("Units").innerText = units
 
@@ -144,23 +148,6 @@ function animate() {
     renderer.render(scene, camera)
 }
 
-function generate_board(x, y) {
-    for (let i = 0; i < x; i++) {
-        for (let j = 0; j < y; j++) {
-            load("grass_tile_base", (e) => {
-                e.position.set(i * 2, 0, j * 2)
-                e.castShadow = true
-                e.receiveShadow = true
-                e.userData.tile = true
-                e.scale.set(1.33, 1.33, 1.33)
-                // e.material[0].color.set(0x0f0f0f)
-                boardGroup.add(e)
-            })
-        }
-    }
-    scene.add(boardGroup)
-}
-
 window.addEventListener('mousedown', () => {
     console.log(players[0].getPlayerId() + " = " + turn_number)
     if (turn_number == players[0].getPlayerId()) {
@@ -172,9 +159,9 @@ window.addEventListener('mousedown', () => {
                 original_location = draggable.position.clone()
                 controls.enableRotate = false
                 let range = draggable.userData.movement
-                for (let i = 0; i < boardGroup.children.length; i++) {
-                    if (original_location.distanceTo(boardGroup.children[i].position) <= range * 2) {
-                        movableTile.push(boardGroup.children[i])
+                for (let i = 0; i < tiles.children.length; i++) {
+                    if (original_location.distanceTo(tiles.children[i].position) <= range * 2) {
+                        movableTile.push(tiles.children[i])
                     }
                 }
                 for (var i = 0; i < movableTile.length; i++) {
