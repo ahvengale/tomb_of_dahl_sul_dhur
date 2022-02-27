@@ -24,16 +24,27 @@ renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 // make light
-const light = new THREE.AmbientLight(0xffffff, 3.0)
+const light = new THREE.AmbientLight(0xffffff, 1.0)
+
+const d_light = new THREE.DirectionalLight(0xffffff, 5.0)
+d_light.position.set(40,50,60)
+d_light.castShadow = true
+d_light.shadow.bias = -0.0025;
+let side = 100;
+d_light.shadow.camera.top = side;
+d_light.shadow.camera.bottom = -side;
+d_light.shadow.camera.left = side;
+d_light.shadow.camera.right = -side;
 
 const sun = new THREE.PointLight(0xffffff, 1, 50, 2);
 sun.position.set(20, 10, 20);
 
 gui.add(sun, 'intensity', 1, 10, .1)
 
-scene.add(gui);
+// scene.add(gui);
 scene.add(sun);
 scene.add(light)
+scene.add(d_light)
 
 const sphereSize = 1;
 const pointLightHelper = new THREE.PointLightHelper(sun, sphereSize);
@@ -67,11 +78,19 @@ scene.add(p1.createPlayer())
 
 players.push(p1)
 
-generate_board(7, 7)
+generate_board(20, 20)
 
 animate();
 
 take_turn()
+
+load("test", (e) => {
+    e.position.set(20, 12.1, 20)
+    e.geometry.center()
+    e.castShadow = true
+    e.receiveShadow = true
+    scene.add(e)
+})
 
 function take_turn() {
     turn_number++
