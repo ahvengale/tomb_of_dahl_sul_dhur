@@ -1,10 +1,9 @@
 import * as THREE from "three";
-import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Vector3 } from "three";
 import gui from "./Details.js"
-import '../res/models/obj/*'
+import load from "./Loader"
+import Player from "./Player.js";
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -59,14 +58,12 @@ let turn_number = 0
 let number_players = 2
 let id = 1
 let moves = 3
-let player_units = []
 
-make_group(1, 0x00ff00, 12, 12)
-make_group(1, 0x00ff00, 10, 10)
-make_group(1, 0x00ff00, 10, 12)
-make_group(1, 0x00ff00, 12, 10)
+let p1 = new Player(1, 0x00ff00, 12, 12)
+scene.add(p1.createPlayer())
 
-make_group(2, 0xff0000, 0, 0)
+let p2 = new Player(2, 0xff0000, 0, 0)
+scene.add(p2.createPlayer())
 
 generate_board(7, 7)
 
@@ -86,63 +83,15 @@ function take_turn() {
     }
     else {
         // player turn
-        for (let elem in player_units) {
-            player_units[elem].userData.movable = true
+        let units = p1.getPlayerUnits();
+        for (let elem in units) {
+            units[elem].userData.movable = true
         }
-        moves = player_units.length
+        moves = units.length
     }
 }
 
-function make_group(player_id, color, x, z) {
-    let group = new THREE.Group();
-    load("15x15_basic", (e) => {
-        e.position.set(0, 2, 0)
-        e.geometry.center()
-        e.userData.animated = true
-        e.castShadow = true
-        e.receiveShadow = true
-        group.add(e)
-    })
-    load("15x15_emissive", (e) => {
-        e.position.set(0, 2, 0)
-        e.geometry.center()
-        e.material = new THREE.MeshBasicMaterial({ color: color })
-        e.userData.animated = true
-        e.castShadow = false
-        e.receiveShadow = false
-        group.add(e)
-    })
-    load("15x15_glass", (e) => {
-        e.position.set(0, 2, 0)
-        e.geometry.center()
-        e.material = new THREE.MeshPhysicalMaterial({
-            roughness: 0.2,
-            transmission: 1.0,
-            thickness: 2,
-            clearcoat: 0.3,
-        });
-        // console.log(e.material)
-        e.userData.animated = true
-        e.castShadow = true
-        e.receiveShadow = true
-        group.add(e)
-    })
-    let light = new THREE.PointLight(color, 5.0, 8.0)
-    light.position.set(0, 2, 0)
-    light.castShadow = true
-    group.add(light)
-    group.position.set(x, 0, z)
-    group.userData.health = 100;
-    group.userData.movement = 2;
-    group.userData.movable = true
-    group.userData.player_id = player_id
-    if (group.userData.player_id == id) {
-        group.userData.draggable = true
-        player_units.push(group)
-    }
-    console.log(group)
-    scene.add(group)
-}
+
 
 function animate() {
     requestAnimationFrame(animate)
@@ -159,19 +108,7 @@ function animate() {
     renderer.render(scene, camera)
 }
 
-function load(filename, fn) {
-    const mtlLoader = new MTLLoader()
-    mtlLoader.setPath('../res/models/obj/')
-    mtlLoader.load(filename + ".mtl", function (materials) {
-        materials.preload()
-        const objLoader = new OBJLoader()
-        objLoader.setMaterials(materials)
-        objLoader.setPath('../res/models/obj/')
-        objLoader.load(filename + ".obj", function (object) {
-            fn(object.children[0])
-        });
-    });
-}
+
 
 function generate_board(x, y) {
     for (let i = 0; i < x; i++) {
