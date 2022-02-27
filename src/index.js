@@ -55,8 +55,8 @@ let new_position = new THREE.Vector3()
 let movableTile = []
 
 let turn_number = 0
-let number_players = 2
-let id = 1
+let id = 1;
+let players = []
 let moves = 3
 
 let p1 = new Player(1, 0x00ff00, 12, 12)
@@ -65,30 +65,42 @@ scene.add(p1.createPlayer())
 let p2 = new Player(2, 0xff0000, 0, 0)
 scene.add(p2.createPlayer())
 
+players.push(p1, p2)
+
 generate_board(7, 7)
 
 animate();
 
 take_turn()
 
-
 function take_turn() {
-    console.log(turn_number)
-    turn_number += 1
-    if (turn_number > number_players) {
+    turn_number++
+    if (turn_number > players.length) {
         turn_number = 1
     }
-    if (turn_number != id) {
+    let currentPlayer = players[turn_number - 1]
+    console.log(currentPlayer == players[0] ? "your Turn" : "AI")
+
+    let units = currentPlayer.getPlayerUnits().length;
+
+    document.getElementById("Player").innerText = turn_number
+    document.getElementById("Units").innerText = units
+
+
+    if (currentPlayer == players[1]) {
         // enemy  ai turn
-        setTimeout(take_turn, 10000)
+        console.log("AI")
+        setTimeout(() => { take_turn() }, 5000)
     }
     else {
         // player turn
-        let units = p1.getPlayerUnits();
-        for (let elem in units) {
-            units[elem].userData.movable = true
-        }
-        moves = units.length
+        console.log("Your Turn")
+        currentPlayer.getPlayerUnits().forEach(elem => {
+            console.log(elem)
+            elem.userData.movable = true
+        })
+        moves = units
+
     }
 }
 
@@ -134,8 +146,8 @@ function generate_board(x, y) {
 }
 
 window.addEventListener('mousedown', () => {
-    if (id == turn_number) {
-        console.log("your turn")
+    console.log(players[0].getPlayerId() + " = " + turn_number)
+    if (turn_number == players[0].getPlayerId()) {
         // console.log(intersection[0].object.parent.userData.movable)
         if (intersection.length > 0) {
             if (intersection[0].object.parent.userData.draggable && intersection[0].object.parent.userData.movable) {
@@ -150,7 +162,7 @@ window.addEventListener('mousedown', () => {
                     }
                 }
                 for (var i = 0; i < movableTile.length; i++) {
-                    let edgesMesh = new THREE.BoundingBoxHelper(movableTile[i]);
+                    let edgesMesh = new THREE.BoxHelper(movableTile[i]);
                     edgesMesh.material.color.set(0x00ff00)
                     scene.add(edgesMesh)
                     movableTile[i].userData.temp_mesh = edgesMesh
@@ -168,8 +180,6 @@ window.addEventListener('mouseup', () => {
         new_position.set(Math.round(draggable.position.x / 2) * 2, 0.0, Math.round(draggable.position.z / 2) * 2)
         if (original_location.distanceTo(new_position) <= draggable.userData.movement * 2 && original_location.distanceTo(new_position) > 1.0) {
             for (let i = 0; i < scene.children.length; i++) {
-                console.log(scene.children[i])
-                console.log(scene.children[i].position.distanceTo(new_position))
                 if (scene.children[i].position.distanceTo(new_position) <= 0.1 && !scene.children[i].userData.tile) {
                     occupied = true
                     console.log(occupied)

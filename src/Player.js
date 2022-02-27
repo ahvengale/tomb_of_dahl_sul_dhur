@@ -14,6 +14,10 @@ export default class Player {
         return this.player_units;
     }
 
+    getPlayerId() {
+        return this.player_id;
+    }
+
     createPlayer() {
         let group = new THREE.Group();
         load("15x15_basic", (e) => {

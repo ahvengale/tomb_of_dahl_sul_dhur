@@ -19,7 +19,7 @@
         }
 
         .guiButton {
-            position: absolute;
+            position: fixed;
             top: 0px;
             left: 0px;
             height: 100px;
@@ -27,6 +27,17 @@
             z-index: 1;
             background-color: green;
             border: none;
+            font-size: xx-large;
+        }
+
+        .playerInfo {
+            color: white;
+            position: fixed;
+            top: 0px;
+            left: 300px;
+            padding: 10px;
+            z-index: 1;
+            font-family: 'Courier New', Courier, monospace;
         }
     </style>
 </head>
@@ -34,6 +45,14 @@
 <body>
 
     <button id="AddUnit" class="guiButton" type="submit">Add Unit</button>
+    <div class="playerInfo">
+        <span>Player:</span>
+        <span id="Player"></span>
+        <br>
+        <span>Units:</span>
+        <span id="Units"></span>
+    </div>
+
 
     <canvas id="C"></canvas>
     <script type="module" src="/src/index.js"></script>
