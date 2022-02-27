@@ -4,6 +4,7 @@ import { Vector3 } from "three";
 import gui from "./Details.js"
 import Player from "./Player.js";
 import MapMaker from "./MapMaker.js";
+import load from "./Loader"
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -27,7 +28,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap
 const light = new THREE.AmbientLight(0xffffff, 1.0)
 
 const d_light = new THREE.DirectionalLight(0xffffff, 5.0)
-d_light.position.set(40,50,60)
+d_light.position.set(40, 50, 60)
 d_light.castShadow = true
 d_light.shadow.bias = -0.0025;
 let side = 100;
@@ -74,14 +75,10 @@ scene.add(p1.createPlayer())
 
 players.push(p1)
 
-<<<<<<< HEAD
-generate_board(20, 20)
-=======
 const MAP = new MapMaker()
 let tiles = await MAP.generate("map1")
 scene.add(tiles)
 
->>>>>>> 3979244b7a5503075453df5feecd32fd8e7a9348
 
 animate();
 
