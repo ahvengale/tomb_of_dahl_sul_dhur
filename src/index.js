@@ -4,7 +4,7 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Vector3 } from "three";
 import gui from "./Details.js"
-
+import '../res/models/obj/*'
 
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -161,12 +161,12 @@ function animate() {
 
 function load(filename, fn) {
     const mtlLoader = new MTLLoader()
-    mtlLoader.setPath('models/models/obj/')
+    mtlLoader.setPath('../res/models/obj/')
     mtlLoader.load(filename + ".mtl", function (materials) {
         materials.preload()
         const objLoader = new OBJLoader()
         objLoader.setMaterials(materials)
-        objLoader.setPath('models/models/obj/')
+        objLoader.setPath('../res/models/obj/')
         objLoader.load(filename + ".obj", function (object) {
             fn(object.children[0])
         });
