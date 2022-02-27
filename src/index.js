@@ -71,6 +71,7 @@ animate();
 
 take_turn()
 
+
 function take_turn() {
     console.log(turn_number)
     turn_number += 1
@@ -91,6 +92,12 @@ function take_turn() {
     }
 }
 
+
+const addBtn = document.getElementById("AddUnit")
+addBtn.addEventListener("click", () => {
+    scene.add(p1.createPlayer())
+    take_turn()
+})
 
 
 function animate() {
