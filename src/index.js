@@ -64,6 +64,7 @@ scene.add(p1.createPlayer())
 players.push(p1)
 
 const MAP = new MapMaker()
+let tiles = await MAP.generate("map1")
 scene.add(tiles)
 
 
