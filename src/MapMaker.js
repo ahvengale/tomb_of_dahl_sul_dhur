@@ -16,18 +16,14 @@ export default class MapMaker {
         let txtLoader = new FileLoader()
         let mapstring
         txtLoader.load("res/maps/" + file + ".txt", (f) => {
-            console.log(f)
             var lines = f.split('\n');
-            console.log(lines)
             for (let i = 0; i < lines.length; i++) {
                 mapstring = lines[i]
-                console.log(mapstring.length)
                 for (let j = 0; j < mapstring.length; j++) {
-
-                    console.log()
                     switch (mapstring[j]) {
                         case "#":
                             load("grass_tile_base", (e) => {
+                                e.scale.set(1.3, 1, 1.3)
                                 e.position.set(i * 2, 0, j * 2)
                                 e.castShadow = true
                                 e.receiveShadow = true
@@ -45,6 +41,17 @@ export default class MapMaker {
                                 this.boardGroup.add(e)
                             })
                             break;
+                        case "T":
+                            load("tree_tile_test", (e) => {
+                                e.position.set(i * 2, 61, j * 2)
+                                e.castShadow = true
+                                e.receiveShadow = true
+                                e.userData.tile = true
+
+                                this.boardGroup.add(e)
+                            })
+                            break;
+
                     }
                 }
             }
