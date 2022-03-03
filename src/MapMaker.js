@@ -31,8 +31,8 @@ export default class MapMaker {
         let mapstring
         await txtLoader.load("res/maps/" + file + ".txt", (f) => {
             let lines = f.split('\n');
-            this.size.x = lines.length
-            this.size.z = lines[0].length
+            this.size.z = lines.length
+            this.size.x = lines[0].length
             for (let i = 0; i < lines.length; i++) {
                 mapstring = lines[i]
                 for (let j = 0; j < mapstring.length; j++) {
