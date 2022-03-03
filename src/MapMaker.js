@@ -23,7 +23,7 @@ export default class MapMaker {
     }
 
     index_to_position(index) {
-        return (Math.floor(this.size.x) / index) + (index % this.size.x)
+        return {x: (Math.floor(index / this.size.x)), z: (index % this.size.x)}
     }
 
     async generate(file) {

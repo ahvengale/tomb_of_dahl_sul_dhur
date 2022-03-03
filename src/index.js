@@ -157,7 +157,8 @@ window.addEventListener('resize', () => {
 })
 
 window.addEventListener('pointerdown', () => {
-    let index = MAP.position_to_index(1,1)
+    let index = MAP.position_to_index(0,1)
     console.log(index)
     let position = MAP.index_to_position(index)
+    console.log(position)
 });
