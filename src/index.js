@@ -6,6 +6,8 @@ import Player from "./Player.js";
 import MapMaker from "./MapMaker.js";
 import load from "./Loader"
 
+let arr = [[]]
+
 //create 3 required objects: scene, camera, and renderer
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({
@@ -84,8 +86,6 @@ const MAP = new MapMaker();
     scene.add(tiles)
 })();
 
-
-
 animate();
 
 take_turn()
@@ -155,3 +155,9 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
 
 })
+
+window.addEventListener('pointerdown', () => {
+    let index = MAP.position_to_index(1,1)
+    console.log(index)
+    let position = MAP.index_to_position(index)
+});

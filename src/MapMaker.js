@@ -6,17 +6,33 @@ export default class MapMaker {
     constructor(level) {
         this.level = level
         this.boardGroup = new Group()
+        this.tiles = []
+        this.size = {}
     }
 
     getBoardGroup() {
         return this.boardGroup
     }
 
+    getTiles() {
+        return this.tiles
+    }
+
+    position_to_index(x, z) {
+        return (x * this.size.x) + (z)
+    }
+
+    index_to_position(index) {
+        return (Math.floor(this.size.x) / index) + (index % this.size.x)
+    }
+
     async generate(file) {
         let txtLoader = new FileLoader()
         let mapstring
-        txtLoader.load("res/maps/" + file + ".txt", (f) => {
-            var lines = f.split('\n');
+        await txtLoader.load("res/maps/" + file + ".txt", (f) => {
+            let lines = f.split('\n');
+            this.size.x = lines.length
+            this.size.z = lines[0].length
             for (let i = 0; i < lines.length; i++) {
                 mapstring = lines[i]
                 for (let j = 0; j < mapstring.length; j++) {
@@ -29,6 +45,7 @@ export default class MapMaker {
                                 e.receiveShadow = true
                                 e.userData.tile = true
                                 this.boardGroup.add(e)
+                                this.tiles.push(e)
                             })
                             break;
                         case "X":
@@ -39,6 +56,7 @@ export default class MapMaker {
                                 e.userData.tile = true
                                 e.material[0].color.set(0x0f0f0f)
                                 this.boardGroup.add(e)
+                                this.tiles.push(e)
                             })
                             break;
                         case "T":
@@ -47,8 +65,9 @@ export default class MapMaker {
                                 e.castShadow = true
                                 e.receiveShadow = true
                                 e.userData.tile = true
-
                                 this.boardGroup.add(e)
+                                this.tiles.push(e)
+                                // console.log(this.tiles)
                             })
                             break;
 
@@ -58,5 +77,4 @@ export default class MapMaker {
         })
         return this.boardGroup
     }
-
 }
