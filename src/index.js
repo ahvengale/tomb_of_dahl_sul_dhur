@@ -156,9 +156,26 @@ window.addEventListener('resize', () => {
 
 })
 
-window.addEventListener('pointerdown', () => {
-    let index = MAP.position_to_index(0,1)
-    console.log(index)
-    let position = MAP.index_to_position(index)
-    console.log(position)
+const mouse = new THREE.Vector2(-1, -1)
+// variables for raycasting and drag positions
+let raycast = new THREE.Raycaster()
+// const floor = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+
+window.addEventListener('pointerdown', (e) => {
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
+    let raycast = new THREE.Raycaster()
+    raycast.setFromCamera(mouse, camera);
+    let intersection = raycast.intersectObjects(scene.children)
+    if (intersection.length > 0) {
+        console.log(intersection)
+        let point = new THREE.Vector3()
+        point = raycast.ray.intersectPlane(floor, point)
+        point.set(Math.round(point.x / 2), 0.0, Math.round(point.z / 2))
+        console.log(point)
+        let index = MAP.position_to_index(point.x, point.z)
+        console.log(index)
+        let position = MAP.index_to_position(index)
+        console.log(position)
+    } 
 });
