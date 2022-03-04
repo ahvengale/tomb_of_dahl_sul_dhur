@@ -177,5 +177,6 @@ window.addEventListener('pointerdown', (e) => {
         console.log(index)
         let position = MAP.index_to_position(index)
         console.log(position)
+        MAP.tiles[index].visible = !MAP.tiles[index].visible
     } 
 });
