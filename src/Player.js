@@ -51,6 +51,7 @@ export default class Player {
         const floor = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
 
         let onPointerDown = (e) => {
+            // get position for mouse and raycast
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
             raycast.setFromCamera(mouse, this.camera);
@@ -62,28 +63,33 @@ export default class Player {
         }
 
         let onPointerUp = () => {
+            // player has already clicked on something to move
             if (this.active) {
+                // move the unit and reset to not active state
                 this.active.position.x = (this.floor_intersection.x)
                 this.active.position.y = (this.floor_intersection.y)
                 this.active.position.z = (this.floor_intersection.z)
                 this.active = false
             }
+            // player has clicked on something for the first time
             else {
+                // the raycast hit something
                 if (this.unit_intersection.length > 0) {
+                    // set the active object to the unit clicked on, select all tiles in pattern
                     this.active = this.unit_intersection[0].object.parent
-                    console.log(this.active.pattern)
                     for(let i = 0; i < this.active.pattern.length; i++) {
                         if(this.active.pattern[i].x + this.active.position.x >= 0 && this.active.pattern[i].z + this.active.position.z  >= 0) {
                             try {
-                                let index = this.map.position_to_index(this.active.pattern[i].x + (this.active.position.x / 2), this.active.pattern[i].z  + (this.active.position.z / 2))
-                                // console.log(index)
-                                // console.log(this.map.tiles[index])
-                                console.log("x: " + (this.active.pattern[i].x + this.active.position.x) + "    z: " + (this.active.pattern[i].z  + this.active.position.z) + "    z: " + index)
-                                // console.log(this.map.tiles)
+                                let index = this.map.position_to_index(
+                                    this.active.pattern[i].x + (this.active.position.x / 2),
+                                    this.active.pattern[i].z  + (this.active.position.z / 2)
+                                )
+                                // TODO: Tile Highlighting / Grid Feedback Per Tile
+                                // TODO: Do / Undo effect
                                 this.map.tiles[index].visible = !this.map.tiles[index].visible
                             }
                             catch(err) {
-                                
+
                             }
                         }
                     }

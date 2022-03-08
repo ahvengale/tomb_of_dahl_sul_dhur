@@ -73,12 +73,14 @@ export default class Unit extends THREE.Group {
 
     }
 
+    // generates array of relative tile positions for valid movement
     capturePattern() {
         let txtLoader = new THREE.FileLoader();
         let capture_map = this.uType + "_attack.txt";
         let mapstring
         txtLoader.load(("res/maps/" + capture_map), (f) => {
             let lines = f.split('\n');
+            // calculate offsets assuming unit is always in center
             let x_offset = Math.floor(lines.length / 2)
             let z_offset = Math.floor(lines[0].length / 2)
             for (let i = 0; i < lines.length; i++) {
@@ -87,9 +89,10 @@ export default class Unit extends THREE.Group {
                 for (let j = 0; j < mapstring.length; j++) {
                     switch (mapstring[j]) {
                         case "-":
-                            console.log(x_offset + " " + z_offset)
+                            // nothing
                             break;
                         case "X":
+                            // push relative position w/ offset
                             this.pattern.push({x: i - x_offset, z: j - z_offset})
                             break;
 
