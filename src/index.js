@@ -65,11 +65,16 @@ let new_position = new THREE.Vector3()
 let movableTile = []
 let turn_number = 0
 
+const MAP = new MapMaker();
+(async () => {
+    let tiles = await MAP.generate("map1")
+    scene.add(tiles)
+})();
 
 let players = []
 let moves
 
-let p1 = new Player(renderer, scene, camera, 1, 0x00ff00, 12, 12);
+let p1 = new Player(renderer, scene, camera, 1, 0x00ff00, 12, 12, MAP);
 let newUnit = p1.addUnit("standard")
 scene.add(newUnit)
 
@@ -78,13 +83,6 @@ scene.add(newUnit)
 // scene.add(p2.createPlayer())
 
 players.push(p1)
-
-
-const MAP = new MapMaker();
-(async () => {
-    let tiles = await MAP.generate("map1")
-    scene.add(tiles)
-})();
 
 animate();
 

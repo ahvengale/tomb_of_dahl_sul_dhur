@@ -4,7 +4,7 @@ import Unit from "./Unit";
 
 export default class Player {
 
-    constructor(renderer, scene, cam, player_id, color, x, z) {
+    constructor(renderer, scene, cam, player_id, color, x, z, map) {
         this.renderer = renderer
         this.scene = scene
         this.camera = cam
@@ -17,6 +17,7 @@ export default class Player {
         this.unit_intersection
         this.active
         this.floor_intersection
+        this.map = map
     }
 
     getPlayerControls() {
@@ -70,6 +71,22 @@ export default class Player {
             else {
                 if (this.unit_intersection.length > 0) {
                     this.active = this.unit_intersection[0].object.parent
+                    console.log(this.active.pattern)
+                    for(let i = 0; i < this.active.pattern.length; i++) {
+                        if(this.active.pattern[i].x + this.active.position.x >= 0 && this.active.pattern[i].z + this.active.position.z  >= 0) {
+                            try {
+                                let index = this.map.position_to_index(this.active.pattern[i].x + (this.active.position.x / 2), this.active.pattern[i].z  + (this.active.position.z / 2))
+                                // console.log(index)
+                                // console.log(this.map.tiles[index])
+                                console.log("x: " + (this.active.pattern[i].x + this.active.position.x) + "    z: " + (this.active.pattern[i].z  + this.active.position.z) + "    z: " + index)
+                                // console.log(this.map.tiles)
+                                this.map.tiles[index].visible = !this.map.tiles[index].visible
+                            }
+                            catch(err) {
+                                
+                            }
+                        }
+                    }
                 }
             }
         }

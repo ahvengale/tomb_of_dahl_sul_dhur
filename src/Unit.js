@@ -14,6 +14,7 @@ export default class Unit extends THREE.Group {
                 glass: '15x15_glass'
             }
         }
+        this.pattern = []
     }
 
     create() {
@@ -66,7 +67,7 @@ export default class Unit extends THREE.Group {
             default:
                 console.log("Could not create specified Unit type")
         }
-        // this.capturePattern()
+        this.capturePattern()
         console.log(this)
         return this
 
@@ -77,44 +78,26 @@ export default class Unit extends THREE.Group {
         let capture_map = this.uType + "_attack.txt";
         let mapstring
         txtLoader.load(("res/maps/" + capture_map), (f) => {
-            var lines = f.split('\n');
+            let lines = f.split('\n');
+            let x_offset = Math.floor(lines.length / 2)
+            let z_offset = Math.floor(lines[0].length / 2)
             for (let i = 0; i < lines.length; i++) {
                 mapstring = lines[i]
                 console.log(mapstring)
                 for (let j = 0; j < mapstring.length; j++) {
                     switch (mapstring[j]) {
                         case "-":
-
+                            console.log(x_offset + " " + z_offset)
                             break;
                         case "X":
-                            const geometry = new THREE.BoxGeometry(.5, 0.1, .5);
-                            const material = new THREE.MeshPhysicalMaterial({ color: 0x00FF00 });
-                            material.opacity = 1
-                            material.reflectivity = 1
-                            material.transmission = .5
-
-                            const cube = new THREE.Mesh(geometry, material);
-                            cube.position.set(i * 2, .5, j * 2)
-                            cube.position.set(i * 2, .5, j * 2)
-                            cube.receiveShadow = true
-
-                            this.add(cube);
-
-                            // load("ModularFloor", (e) => {
-                            //     e.position.set(i * 2, 0, j * 2)
-                            //     e.castShadow = true
-                            //     e.receiveShadow = true
-                            //     e.userData.tile = true
-                            //     e.material[0].color.set(0x0f0f0f)
-                            //     this.boardGroup.add(e)
-                            // })
+                            this.pattern.push({x: i - x_offset, z: j - z_offset})
                             break;
 
                     }
                 }
             }
         })
-
+        console.log(this.pattern)
     }
 
 }
