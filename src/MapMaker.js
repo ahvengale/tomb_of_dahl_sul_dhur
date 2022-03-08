@@ -37,7 +37,7 @@ export default class MapMaker {
             for (let i = 0; i < lines.length; i++) {
                 mapstring = lines[i]
                 for (let j = 0; j < mapstring.length; j++) {
-                    let new_tile = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshBasicMaterial())
+                    let new_tile = new THREE.Mesh()
                     switch (mapstring[j]) {
                         case "#":
                             load("grass_tile_base", (e) => {
@@ -78,10 +78,10 @@ export default class MapMaker {
             }
             console.log(this.tiles)
             for(let i = 0; i < this.tiles.length; i++) {
-                console.log('here')
+                // console.log('here')
                 this.boardGroup.add(this.tiles[i])
                 if(this.boardGroup.children.indexOf(this.tiles[i]) != -1) {
-                    console.log("yay!")
+                    // console.log("yay!")
                 }
             }
             console.log(this.boardGroup)

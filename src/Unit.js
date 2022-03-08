@@ -66,7 +66,7 @@ export default class Unit extends THREE.Group {
             default:
                 console.log("Could not create specified Unit type")
         }
-        this.capturePattern()
+        // this.capturePattern()
         console.log(this)
         return this
 
