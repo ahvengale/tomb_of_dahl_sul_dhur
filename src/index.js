@@ -83,6 +83,7 @@ scene.add(newUnit)
 // scene.add(p2.createPlayer())
 
 players.push(p1)
+p1.init()
 
 animate();
 
@@ -123,6 +124,7 @@ function take_turn() {
         moves = units
 
     }
+    console.log('terminated')
 }
 
 const addBtn = document.getElementById("AddUnit")

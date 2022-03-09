@@ -44,7 +44,7 @@ export default class Player {
 
     }
 
-    playerTurn() {
+    init() {
         // mouse defined for mousemove event
         const mouse = new THREE.Vector2(-1, -1)
         // variables for raycasting and drag positions
@@ -60,7 +60,7 @@ export default class Player {
             this.floor_intersection = new THREE.Vector3()
             this.floor_intersection = raycast.ray.intersectPlane(floor, this.floor_intersection)
             this.floor_intersection.set(Math.round(this.floor_intersection.x / 2) * 2, 0.0, Math.round(this.floor_intersection.z / 2) * 2)
-            console.log(this.floor_intersection)
+            // console.log(this.floor_intersection)
         }
 
         let onPointerUp = () => {
@@ -84,8 +84,8 @@ export default class Player {
                         }
                     }
                 }
-                console.log(indicies)
-                console.log(this.map.position_to_index(this.floor_intersection.x, this.floor_intersection.z))
+                // console.log(indicies)
+                // console.log(this.map.position_to_index(this.floor_intersection.x, this.floor_intersection.z))
                 if(indicies.includes(this.map.position_to_index(this.floor_intersection.x / 2, this.floor_intersection.z / 2))) {
                     this.active.position.x = (this.floor_intersection.x)
                     this.active.position.y = (this.floor_intersection.y)
@@ -125,15 +125,19 @@ export default class Player {
     // TODO: Move highlighting into map class
 
     highlight_tile(index) {
-        console.log(this.map.tiles[index])
+        // console.log(this.map.tiles[index])
         this.map.tiles[index].userData.outline = new THREE.LineSegments(new THREE.EdgesGeometry(this.map.tiles[index].geometry), new THREE.MeshBasicMaterial())
         this.map.tiles[index].userData.outline.position.set(this.map.tiles[index].position.x, this.map.tiles[index].position.y, this.map.tiles[index].position.z)
         this.scene.add(this.map.tiles[index].userData.outline)
     }
     unhighlight_tile(index) {
-        console.log(this.map.tiles[index].userData.outline)
+        // console.log(this.map.tiles[index].userData.outline)
         this.scene.remove(this.map.tiles[index].userData.outline)
         delete this.map.tiles[index].userData.outline
+    }
+
+    playerTurn() {
+        
     }
 
 }

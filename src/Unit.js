@@ -68,7 +68,7 @@ export default class Unit extends THREE.Group {
                 console.log("Could not create specified Unit type")
         }
         this.capturePattern()
-        console.log(this)
+        // console.log(this)
         return this
 
     }
@@ -85,7 +85,7 @@ export default class Unit extends THREE.Group {
             let z_offset = Math.floor(lines[0].length / 2)
             for (let i = 0; i < lines.length; i++) {
                 mapstring = lines[i]
-                console.log(mapstring)
+                // console.log(mapstring)
                 for (let j = 0; j < mapstring.length; j++) {
                     switch (mapstring[j]) {
                         case "-":
@@ -100,7 +100,7 @@ export default class Unit extends THREE.Group {
                 }
             }
         })
-        console.log(this.pattern)
+        // console.log(this.pattern)
     }
 
 }

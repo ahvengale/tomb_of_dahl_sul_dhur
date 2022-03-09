@@ -76,7 +76,7 @@ export default class MapMaker {
                 }
 
             }
-            console.log(this.tiles)
+            // console.log(this.tiles)
             for(let i = 0; i < this.tiles.length; i++) {
                 // console.log('here')
                 this.boardGroup.add(this.tiles[i])
@@ -84,7 +84,7 @@ export default class MapMaker {
                     // console.log("yay!")
                 }
             }
-            console.log(this.boardGroup)
+            // console.log(this.boardGroup)
         })
         
         return this.boardGroup
