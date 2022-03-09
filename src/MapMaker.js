@@ -1,5 +1,5 @@
 import load from "./Loader"
-import { FileLoader } from "three"
+import { FileLoader, Scene } from "three"
 import { Group } from "three"
 import * as THREE from "three";
 
@@ -46,7 +46,7 @@ export default class MapMaker {
                                 new_tile.castShadow = true
                                 new_tile.receiveShadow = true
                                 new_tile.userData.tile = true
-                                new_tile.scale.set(1.3, 1, 1.3)
+                                // new_tile.scale.set(1.3, 1, 1.3)
                                 new_tile.position.set(i * 2, 0, j * 2)
                             })
                             break;
