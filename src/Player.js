@@ -89,15 +89,19 @@ export default class Player {
                     }
                     // console.log(indicies)
                     // console.log(this.map.position_to_index(this.floor_intersection.x, this.floor_intersection.z))
-                    if(indicies.includes(this.map.position_to_index(this.floor_intersection.x / 2, this.floor_intersection.z / 2))) {
+                    let index = this.map.position_to_index(this.floor_intersection.x / 2, this.floor_intersection.z / 2)
+                    if(indicies.includes(index)) {
                         if(has_action) {
-                            if(elem.type == "movement") {
+                            if(elem.type == "movement" && !this.map.tiles[index].userData.occupied) {
+                                let old_index = this.map.position_to_index((this.active.position.x / 2), (this.active.position.z / 2))
+                                this.map.tiles[old_index].userData.occupied = false
                                 this.active.position.x = (this.floor_intersection.x)
                                 this.active.position.y = (this.floor_intersection.y)
                                 this.active.position.z = (this.floor_intersection.z)
+                                this.map.tiles[index].userData.occupied = true
                                 has_action = false
                             }
-                            else if(elem.type == "attack" && has_enemy) {
+                            else if(elem.type == "attack" && this.map.tiles[index].userData.enemy) {
                                 console.log("ouch")
                                 has_action = false
                             }
@@ -120,7 +124,11 @@ export default class Player {
                                         elem.arr[i].x + (this.active.position.x / 2),
                                         elem.arr[i].z + (this.active.position.z / 2)
                                     )
-                                    if(!this.map.tiles[index].userData.outline) {
+                                    if(this.map.tiles[index].userData.outline) {
+                                        this.unhighlight_tile(index)
+                                        this.highlight_tile(index, 0xffff00)
+                                    }
+                                    else {
                                         this.highlight_tile(index, elem.color)
                                     }
                                 }
