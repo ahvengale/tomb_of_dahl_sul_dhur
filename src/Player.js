@@ -65,6 +65,8 @@ export default class Player {
 
         let onPointerUp = () => {
             // player has already clicked on something to move
+            let has_action = true
+            let has_enemy = true
             if (this.active) {
                 for(let elem of [{arr: this.active.attack_pattern, type: "attack"}, {arr: this.active.movement_pattern, type: "movement"}]) {
                     // track indicies
@@ -88,13 +90,17 @@ export default class Player {
                     // console.log(indicies)
                     // console.log(this.map.position_to_index(this.floor_intersection.x, this.floor_intersection.z))
                     if(indicies.includes(this.map.position_to_index(this.floor_intersection.x / 2, this.floor_intersection.z / 2))) {
-                        if(elem.type == "movement") {
-                            this.active.position.x = (this.floor_intersection.x)
-                            this.active.position.y = (this.floor_intersection.y)
-                            this.active.position.z = (this.floor_intersection.z)
-                        }
-                        if(elem.type == "attack") {
-                            console.log("ouch")
+                        if(has_action) {
+                            if(elem.type == "movement") {
+                                this.active.position.x = (this.floor_intersection.x)
+                                this.active.position.y = (this.floor_intersection.y)
+                                this.active.position.z = (this.floor_intersection.z)
+                                has_action = false
+                            }
+                            else if(elem.type == "attack" && has_enemy) {
+                                console.log("ouch")
+                                has_action = false
+                            }
                         }
                     }
                 }
