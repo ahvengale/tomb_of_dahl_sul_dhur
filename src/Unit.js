@@ -14,7 +14,8 @@ export default class Unit extends THREE.Group {
                 glass: '15x15_glass'
             }
         }
-        this.pattern = []
+        this.attack_pattern = []
+        this.movement_pattern = []
     }
 
     create() {
@@ -67,16 +68,18 @@ export default class Unit extends THREE.Group {
             default:
                 console.log("Could not create specified Unit type")
         }
-        this.capturePattern()
-        // console.log(this)
+        for(let elem of [ {type: "_attack.txt", arr: this.attack_pattern}, {type: "_movement.txt", arr: this.movement_pattern} ]) {
+            this.capturePattern(elem.type, elem.arr)
+        }
+        console.log(this)
         return this
 
     }
 
-    // generates array of relative tile positions for valid movement
-    capturePattern() {
+    // generates array of relative tile positions for valid movement and attacking
+    capturePattern(type, arr) {
         let txtLoader = new THREE.FileLoader();
-        let capture_map = this.uType + "_attack.txt";
+        let capture_map = this.uType + type;
         let mapstring
         txtLoader.load(("res/maps/" + capture_map), (f) => {
             let lines = f.split('\n');
@@ -93,7 +96,7 @@ export default class Unit extends THREE.Group {
                             break;
                         case "X":
                             // push relative position w/ offset
-                            this.pattern.push({x: i - x_offset, z: j - z_offset})
+                            arr.push({x: i - x_offset, z: j - z_offset})
                             break;
 
                     }
