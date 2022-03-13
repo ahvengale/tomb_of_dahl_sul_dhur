@@ -59,10 +59,6 @@ scene.add(pointLightHelper);
 
 const floor = new THREE.Plane(new Vector3(0, 1, 0), 0)
 
-let draggable = new THREE.Object3D()
-let original_location = new THREE.Vector3()
-let new_position = new THREE.Vector3()
-let movableTile = []
 let turn_number = 0
 
 const MAP = new MapMaker();
@@ -78,12 +74,16 @@ let p1 = new Player(renderer, scene, camera, 1, 0x00ff00, 12, 12, MAP);
 let newUnit = p1.addUnit("standard")
 scene.add(newUnit)
 
-
+let p2 = new Player(renderer, scene, camera, 1, 0xff0000, 24, 24, MAP)
+let _newUnit = p2.addUnit("standard")
+scene.add(_newUnit)
 // let p2 = new Player(2, 0xff0000, 0, 0)
 // scene.add(p2.createPlayer())
 
-players.push(p1)
+players.push(p1, p2)
 p1.init()
+
+console.table(players)
 
 animate();
 
@@ -124,7 +124,7 @@ function take_turn() {
         moves = units
 
     }
-    console.log('terminated')
+
 }
 
 const addBtn = document.getElementById("AddUnit")
@@ -155,8 +155,3 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
 
 })
-
-const mouse = new THREE.Vector2(-1, -1)
-// variables for raycasting and drag positions
-let raycast = new THREE.Raycaster()
-// const floor = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)

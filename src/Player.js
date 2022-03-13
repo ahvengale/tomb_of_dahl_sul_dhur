@@ -68,31 +68,31 @@ export default class Player {
             let has_action = true
             let has_enemy = true
             if (this.active) {
-                for(let elem of [{arr: this.active.attack_pattern, type: "attack"}, {arr: this.active.movement_pattern, type: "movement"}]) {
+                for (let elem of [{ arr: this.active.attack_pattern, type: "attack" }, { arr: this.active.movement_pattern, type: "movement" }]) {
                     // track indicies
                     let indicies = []
                     // move the unit and reset to not active state
-                    for(let i = 0; i < elem.arr.length; i++) {
-                        if(elem.arr[i].x + this.active.position.x >= 0 && elem.arr[i].z + this.active.position.z  >= 0) {
+                    for (let i = 0; i < elem.arr.length; i++) {
+                        if (elem.arr[i].x + this.active.position.x >= 0 && elem.arr[i].z + this.active.position.z >= 0) {
                             try {
                                 let index = this.map.position_to_index(
                                     elem.arr[i].x + (this.active.position.x / 2),
-                                    elem.arr[i].z  + (this.active.position.z / 2)
+                                    elem.arr[i].z + (this.active.position.z / 2)
                                 )
                                 indicies.push(index)
                                 this.unhighlight_tile(index)
                             }
-                            catch(err) {
-                                
+                            catch (err) {
+
                             }
                         }
                     }
                     // console.log(indicies)
                     // console.log(this.map.position_to_index(this.floor_intersection.x, this.floor_intersection.z))
                     let index = this.map.position_to_index(this.floor_intersection.x / 2, this.floor_intersection.z / 2)
-                    if(indicies.includes(index)) {
-                        if(has_action) {
-                            if(elem.type == "movement" && !this.map.tiles[index].userData.occupied) {
+                    if (indicies.includes(index)) {
+                        if (has_action) {
+                            if (elem.type == "movement" && !this.map.tiles[index].userData.occupied) {
                                 let old_index = this.map.position_to_index((this.active.position.x / 2), (this.active.position.z / 2))
                                 this.map.tiles[old_index].userData.occupied = false
                                 this.active.position.x = (this.floor_intersection.x)
@@ -101,7 +101,7 @@ export default class Player {
                                 this.map.tiles[index].userData.occupied = true
                                 has_action = false
                             }
-                            else if(elem.type == "attack" && this.map.tiles[index].userData.enemy) {
+                            else if (elem.type == "attack" && this.map.tiles[index].userData.enemy) {
                                 console.log("ouch")
                                 has_action = false
                             }
@@ -116,15 +116,15 @@ export default class Player {
                 if (this.unit_intersection.length > 0) {
                     // set the active object to the unit clicked on, select all tiles in pattern
                     this.active = this.unit_intersection[0].object.parent
-                    for(let elem of [{arr: this.active.attack_pattern, type: "attack", color: 0xff0000}, {arr: this.active.movement_pattern, type: "movement", color: 0x00ff00}]) {
-                        for(let i = 0; i < elem.arr.length; i++) {
-                            if(elem.arr[i].x + this.active.position.x >= 0 && elem.arr[i].z + this.active.position.z  >= 0) {
+                    for (let elem of [{ arr: this.active.attack_pattern, type: "attack", color: 0xff0000 }, { arr: this.active.movement_pattern, type: "movement", color: 0x00ff00 }]) {
+                        for (let i = 0; i < elem.arr.length; i++) {
+                            if (elem.arr[i].x + this.active.position.x >= 0 && elem.arr[i].z + this.active.position.z >= 0) {
                                 try {
                                     let index = this.map.position_to_index(
                                         elem.arr[i].x + (this.active.position.x / 2),
                                         elem.arr[i].z + (this.active.position.z / 2)
                                     )
-                                    if(this.map.tiles[index].userData.outline) {
+                                    if (this.map.tiles[index].userData.outline) {
                                         this.unhighlight_tile(index)
                                         this.highlight_tile(index, 0xffff00)
                                     }
@@ -132,7 +132,7 @@ export default class Player {
                                         this.highlight_tile(index, elem.color)
                                     }
                                 }
-                                catch(err) {
+                                catch (err) {
                                     console.log(err)
                                 }
                             }
@@ -152,10 +152,10 @@ export default class Player {
     highlight_tile(index, color) {
         // console.log(this.map.tiles[index])
         this.map.tiles[index].userData.outline = new THREE.LineSegments(new THREE.EdgesGeometry(this.map.tiles[index].geometry),
-                                                                        new THREE.LineBasicMaterial({color: color}))
+            new THREE.LineBasicMaterial({ color: color }))
         this.map.tiles[index].userData.outline.position.set(this.map.tiles[index].position.x,
-                                                            this.map.tiles[index].position.y,
-                                                            this.map.tiles[index].position.z)
+            this.map.tiles[index].position.y,
+            this.map.tiles[index].position.z)
         this.scene.add(this.map.tiles[index].userData.outline)
     }
     unhighlight_tile(index) {
@@ -165,7 +165,7 @@ export default class Player {
     }
 
     playerTurn() {
-        
+
     }
 
 }
